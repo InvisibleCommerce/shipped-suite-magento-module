@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="shippedsuite.order.upsert" request="string"/>
+    <topic name="shippedsuite.shipment.upsert" request="string"/>
+    <topic name="shippedsuite.reversal.upsert" request="string"/>
+    <topic name="shippedsuite.product.upsert" request="string"/>
+    <topic name="shippedsuite.webhook.process" request="string"/>
+</config>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_shipment_save_after">
+        <observer name="shipped_suite_shipment_observer" instance="InvisibleCommerce\ShippedSuite\Observer\ShipmentObserver" />
+    </event>
+    <event name="sales_order_shipment_track_save_after">
+        <observer name="shipped_suite_track_observer" instance="InvisibleCommerce\ShippedSuite\Observer\TrackObserver" />
+    </event>
+    <event name="sales_order_creditmemo_save_after">
+        <observer name="shipped_suite_creditmemo_observer" instance="InvisibleCommerce\ShippedSuite\Observer\CreditMemoObserver" />
+    </event>
+    <event name="sales_order_save_after">
+        <observer name="shipped_suite_order_observer" instance="InvisibleCommerce\ShippedSuite\Observer\OrderObserver" />
+    </event>
+    <event name="catalog_product_save_after">
+        <observer name="shipped_suite_product_observer" instance="InvisibleCommerce\ShippedSuite\Observer\ProductObserver" />
+    </event>
+</config>

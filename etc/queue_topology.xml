@@ -1,0 +1,9 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="shippedsuite-exchange" type="topic" connection="db">
+        <binding id="ShippedSuiteOrderUpsert" topic="shippedsuite.order.upsert" destinationType="queue" destination="shippedsuite_order_upsert"/>
+        <binding id="ShippedSuiteShipmentUpsert" topic="shippedsuite.shipment.upsert" destinationType="queue" destination="shippedsuite_shipment_upsert"/>
+        <binding id="ShippedSuiteReversalUpsert" topic="shippedsuite.reversal.upsert" destinationType="queue" destination="shippedsuite_reversal_upsert"/>
+        <binding id="ShippedSuiteProductUpsert" topic="shippedsuite.product.upsert" destinationType="queue" destination="shippedsuite_product_upsert"/>
+        <binding id="ShippedSuiteWebhookProcess" topic="shippedsuite.webhook.process" destinationType="queue" destination="shippedsuite_webhook_process"/>
+    </exchange>
+</config>

@@ -1,0 +1,8 @@
+type Mutation {
+    manageShippedSuiteProducts(input: ManageShippedSuiteProductsInput!): AddProductsToCartOutput @resolver(class: "\\InvisibleCommerce\\ShippedSuite\\Model\\Resolver\\ShippedSuite") @doc(description:"Add Shipped Suite Products")
+}
+
+input ManageShippedSuiteProductsInput {
+    cart_id: String @doc(description: "The cart ID"),
+    selected: Boolean @doc(description: "Whether or not Shield should be included")
+}

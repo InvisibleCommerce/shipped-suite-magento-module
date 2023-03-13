@@ -1,0 +1,17 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+    <publisher topic="shippedsuite.order.upsert">
+        <connection name="db" exchange="shippedsuite-exchange" />
+    </publisher>
+    <publisher topic="shippedsuite.shipment.upsert">
+        <connection name="db" exchange="shippedsuite-exchange" />
+    </publisher>
+    <publisher topic="shippedsuite.reversal.upsert">
+        <connection name="db" exchange="shippedsuite-exchange" />
+    </publisher>
+    <publisher topic="shippedsuite.product.upsert">
+        <connection name="db" exchange="shippedsuite-exchange" />
+    </publisher>
+    <publisher topic="shippedsuite.webhook.process">
+        <connection name="db" exchange="shippedsuite-exchange" />
+    </publisher>
+</config>

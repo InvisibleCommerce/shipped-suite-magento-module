@@ -1,0 +1,9 @@
+<config>
+    <type name="Magento\Sales\Api\OrderManagementInterface">
+        <plugin name="shipped_suite_after_place_order" type="InvisibleCommerce\ShippedSuite\Plugin\OrderPlaced" sortOrder="1" disabled="false" />
+    </type>
+
+    <type name="Magento\Checkout\Controller\Cart\Index">
+        <plugin name="shipped_suite_checkout_controller_cart_index_before" type="InvisibleCommerce\ShippedSuite\Controller\Checkout\Cart\Plugin" sortOrder="1" />
+    </type>
+</config>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+    <consumer name="ShippedSuiteOrderUpsert"
+              queue="shippedsuite_order_upsert"
+              connection="db"
+              handler="InvisibleCommerce\ShippedSuite\Consumer\OrderConsumer::process"/>
+    <consumer name="ShippedSuiteShipmentUpsert"
+              queue="shippedsuite_shipment_upsert"
+              connection="db"
+              handler="InvisibleCommerce\ShippedSuite\Consumer\ShipmentConsumer::process"/>
+    <consumer name="ShippedSuiteReversalUpsert"
+              queue="shippedsuite_reversal_upsert"
+              connection="db"
+              handler="InvisibleCommerce\ShippedSuite\Consumer\ReversalConsumer::process"/>
+    <consumer name="ShippedSuiteProductUpsert"
+              queue="shippedsuite_product_upsert"
+              connection="db"
+              handler="InvisibleCommerce\ShippedSuite\Consumer\ProductConsumer::process"/>
+    <consumer name="ShippedSuiteWebhookProcess"
+              queue="shippedsuite_webhook_process"
+              connection="db"
+              handler="InvisibleCommerce\ShippedSuite\Consumer\WebhookConsumer::process"/>
+</config>
