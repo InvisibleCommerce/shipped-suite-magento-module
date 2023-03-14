@@ -56,7 +56,7 @@
                     <comment>To enable or disable Shipped Green carbon-neutral shipments.</comment>
                 </field>
                 <field id="appearance" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <source_model>Magento\Config\Model\Config\Source\Appearance</source_model>
+                    <source_model>InvisibleCommerce\ShippedSuite\Model\Adminhtml\System\Config\Source\Appearance</source_model>
                     <label>Widget Appearance</label>
                     <comment>Change widget appearance based on light/dark theme.</comment>
                     <tooltip>Setting it as "auto" will detect if it's a light or dark theme and show the appropriate widget appearance.</tooltip>
