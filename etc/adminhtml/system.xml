@@ -14,15 +14,22 @@
                 <field id="environment" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <source_model>InvisibleCommerce\ShippedSuite\Model\Adminhtml\System\Config\Source\Environment</source_model>
                     <label>Environment</label>
+                    <comment>There are 2 separate environments, "staging" and "production". Perform all development against the "staging" environment, do not send any production/sensitive data to it.</comment>
                 </field>
                 <field id="public_key" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Public Key</label>
+                    <comment>Enter your generated Public Key here. Do not enter the SECRET key here.</comment>
+                    <tooltip>Go to https://api-docs.shippedsuite.com/docs for more info on generating API keys.</tooltip>
                 </field>
                 <field id="secret_key" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Secret Key</label>
+                    <comment>Enter your generated Secret key here.</comment>
+                    <tooltip>Go to https://api-docs.shippedsuite.com/docs for more info on generating API keys.</tooltip>
                 </field>
                 <field id="webhook_secret" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Webhook Secret</label>
+                    <comment>Enter your generated Webhook Secret here.</comment>
+                    <tooltip>Go to https://api-docs.shippedsuite.com/docs for more info on webhooks.</tooltip>
                 </field>
             </group>
         </section>
@@ -36,26 +43,40 @@
                 <field id="widget_display" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                     <label>Widget Display</label>
+                    <comment>To enable or disable the visibility of the Shipped widget.</comment>
                 </field>
                 <field id="shield" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
-                    <label>Shield</label>
+                    <label>Shipped Shield</label>
+                    <comment>To enable or disable Shipped Shield package assurance.</comment>
                 </field>
                 <field id="green" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
-                    <label>Green</label>
+                    <label>Shipped Green</label>
+                    <comment>To enable or disable Shipped Green carbon-neutral shipments.</comment>
+                </field>
+                <field id="appearance" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <source_model>Magento\Config\Model\Config\Source\Appearance</source_model>
+                    <label>Widget Appearance</label>
+                    <comment>Change widget appearance based on light/dark theme.</comment>
+                    <tooltip>Setting it as "auto" will detect if it's a light or dark theme and show the appropriate widget appearance.</tooltip>
                 </field>
                 <field id="default" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                     <label>Default State</label>
-                </field>
-                <field id="informational" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
-                    <label>Informational Only</label>
+                    <comment>Recommended setting is "Disable" where Shipped is automatically added to the order.</comment>
+                    <tooltip>Selecting "Enable" will require the customer to manually add Shipped to the order.</tooltip>
                 </field>
                 <field id="mandatory" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                     <label>Mandatory</label>
+                    <comment>Select "Enable" if customers are required to add Shipped Shield/Green; they will not be able to remove Shipped Shield/Green from their orders.</comment>
+                </field>
+                <field id="informational" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                    <label>Informational Only</label>
+                    <comment>For merchant paid option, select “Enable” to only show information about Shipped; customers will not be able to add or remove Shipped from their orders. </comment>
+                    <tooltip>If you only want to pay for Shipped when a customer has declined the offer, keep this set as "Disable".</tooltip>
                 </field>
             </group>
         </section>

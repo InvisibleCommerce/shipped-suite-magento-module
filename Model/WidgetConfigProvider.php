@@ -32,6 +32,7 @@ class WidgetConfigProvider implements ConfigProviderInterface
                     'isShield' => $this->scopeConfig->getValue('shipped_suite_widget/widget/shield') === '1',
                     'isGreen' => $this->scopeConfig->getValue('shipped_suite_widget/widget/green') === '1',
                     'isOffByDefault' => $this->scopeConfig->getValue('shipped_suite_widget/widget/default') == '0',
+                    'appearance' => $this->scopeConfig->getValue('shipped_suite_widget/widget/appearance'),
                     'isInformational' => $this->scopeConfig->getValue('shipped_suite_widget/widget/informational') == '1',
                     'isMandatory' => $this->scopeConfig->getValue('shipped_suite_widget/widget/mandatory') == '1',
                     'publicKey' => $this->scopeConfig->getValue('shipped_suite_api/api/public_key'),

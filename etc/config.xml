@@ -12,8 +12,9 @@
                 <shield>1</shield>
                 <green>0</green>
                 <default>1</default>
-                <informational>0</informational>
+                <appearance>auto</appearance>
                 <mandatory>0</mandatory>
+                <informational>0</informational>
             </widget>
         </shipped_suite_widget>
     </default>
