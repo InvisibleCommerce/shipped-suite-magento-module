@@ -7,21 +7,25 @@ use InvisibleCommerce\ShippedSuite\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class CartHelper
 {
     private LoggerInterface $logger;
     private OffersAPI $offersAPI;
     private ProductRepositoryInterface $productRepository;
+    private ScopeConfigInterface $scopeConfig;
 
     public function __construct(
         LoggerInterface $logger,
         OffersAPI $offersAPI,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->logger = $logger;
         $this->offersAPI = $offersAPI;
         $this->productRepository = $productRepository;
+        $this->scopeConfig = $scopeConfig;
     }
 
     public function removeManagedProducts(CartInterface &$quote): CartInterface
@@ -55,6 +59,13 @@ class CartHelper
 
     private function addOffer(CartInterface &$quote, string $sku, float $price): void
     {
+        if ($this->scopeConfig->getValue('shipped_suite_widget/widget/shield') !== '1' && $sku === Product::SHIPPED_SHIELD_SKU) {
+            return;
+        }
+        if ($this->scopeConfig->getValue('shipped_suite_widget/widget/green') !== '1' && $sku === Product::SHIPPED_GREEN_SKU) {
+            return;
+        }
+
         $product = $this->productRepository->get($sku);
         $product->setPrice($price);
         $item = $quote->addProduct(
