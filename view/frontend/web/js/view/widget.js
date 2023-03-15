@@ -24,6 +24,8 @@ define(
                 var checkoutConfig = window.checkoutConfig;
                 var config = checkoutConfig.shippedSuite;
 
+                console.log('??????');
+
                 if (typeof shippedConfig !== 'undefined') {
                     // variable is undefined
                     var localShippedConfig = Object.assign(config.shippedConfig, shippedConfig || {});
