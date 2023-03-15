@@ -14,7 +14,10 @@ define(
             },
             initialize: function() {
                 var config = window.checkoutConfig.shippedSuite;
-                var shippedConfig = config.shippedConfig;
+                console.log(shippedConfig);
+                console.log(config.shippedConfig);
+                var localShippedConfig = Object.assign(config.shippedConfig, shippedConfig || {});
+                console.log(localShippedConfig);
                 this._super();
 
                 require([
@@ -24,7 +27,7 @@ define(
                 ], function ($, $do) {
                     $(document).ready(function() {
                         $do.get('.shipped-widget', function() {
-                            const shippedWidget = new Shipped.Widget(shippedConfig);
+                            const shippedWidget = new Shipped.Widget(localShippedConfig);
 
                             let subtotal = 0;
                             customerData.get('cart')().items.map((item) => {
