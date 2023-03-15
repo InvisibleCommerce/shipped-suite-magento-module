@@ -46,9 +46,9 @@ define(
                         }
                     });
 
-                    var newTotals = totals.totals();
+                    var newTotals = quote.totals();
                     newTotals.items_qty = 45;
-                    totals.setTotals(newTotals);
+                    quote.setTotals(newTotals);
 
                     return true;
                 }
