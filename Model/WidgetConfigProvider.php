@@ -7,6 +7,8 @@ use InvisibleCommerce\ShippedSuite\Api\ShippedSuiteAPI;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Image;
 
 class WidgetConfigProvider implements ConfigProviderInterface
 {
@@ -15,13 +17,13 @@ class WidgetConfigProvider implements ConfigProviderInterface
 
     private ScopeConfigInterface $scopeConfig;
     private StoreManagerInterface $storeManager;
-    private \Magento\Catalog\Helper\Image $imageHelper;
+    private Image $imageHelper;
     private ProductRepositoryInterface $productRepository;
 
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        Image $imageHelper,
         ProductRepositoryInterface $productRepository
     ) {
         $this->scopeConfig = $scopeConfig;
