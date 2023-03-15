@@ -52,9 +52,11 @@ define(
                     });
 
                     var totals = 0;
-                    response.items.forEach((item) => {
+                    items.forEach((item) => {
                         totals += item.qty;
                     })
+                    console.log('shouldu update to...');
+                    console.log(totals);
                     window.checkoutConfig.totalsData.items_qty = totals;
 
                     return true;
