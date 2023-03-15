@@ -1,10 +1,18 @@
 define(
-    ['ko', 'jquery', 'uiComponent', 'Magento_Checkout/js/action/get-totals', 'Magento_Customer/js/customer-data'],
+    [
+        'ko',
+        'jquery',
+        'uiComponent',
+        'Magento_Checkout/js/action/get-totals',
+        'Magento_Checkout/js/model/cart/cache',
+        'Magento_Customer/js/customer-data'
+    ],
     function(
         ko,
         $,
         Component,
         getTotalsAction,
+        cartCache,
         customerData
     ) {
         'use strict';
@@ -57,6 +65,7 @@ define(
                                 }).then((response) => {
                                     response.json();
                                 }).then(() => {
+                                    cartCache.set('totals',null);
                                     getTotalsAction([], $.Deferred());
                                 });
                             });
