@@ -3,7 +3,7 @@ define(
         'ko',
         'jquery',
         'uiComponent',
-        'Magento_Checkout/js/action/get-totals',
+        './get-totals',
         'Magento_Checkout/js/model/cart/cache',
         'Magento_Customer/js/customer-data'
     ],
@@ -43,7 +43,9 @@ define(
 
                 this._super();
 
-                var callback = () => {
+                var callback = (response) => {
+                    console.log('response');
+                    console.log(response);
                     var items = customerData.get('cart')().items;
                     console.log('callback executed');
                     console.log(items);
