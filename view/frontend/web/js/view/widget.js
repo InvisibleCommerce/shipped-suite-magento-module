@@ -14,9 +14,15 @@ define(
             },
             initialize: function() {
                 var config = window.checkoutConfig.shippedSuite;
-                console.log(shippedConfig || {});
-                console.log(config.shippedConfig);
-                var localShippedConfig = Object.assign(config.shippedConfig, shippedConfig || {});
+                if (typeof shippedConfig !== 'undefined') {
+                    // variable is undefined
+                    console.log(shippedConfig || {});
+                    console.log(config.shippedConfig);
+                    var localShippedConfig = Object.assign(config.shippedConfig, shippedConfig || {});
+                } else {
+                    var localShippedConfig = config.shippedConfig;
+                }
+
                 console.log(localShippedConfig);
                 this._super();
 
