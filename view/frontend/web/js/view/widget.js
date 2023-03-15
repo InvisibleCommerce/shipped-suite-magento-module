@@ -51,6 +51,12 @@ define(
                         }
                     });
 
+                    var totals = 0;
+                    response.items.forEach((item) => {
+                        totals += item.qty;
+                    })
+                    window.checkoutConfig.totalsData.items_qty = totals;
+
                     return true;
                 }
 
