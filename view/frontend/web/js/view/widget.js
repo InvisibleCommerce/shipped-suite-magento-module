@@ -44,13 +44,17 @@ define(
                 this._super();
 
                 var callback = () => {
+                    var items = customerData.get('cart')().items;
                     console.log('callback executed');
-                    console.log(customerData.get('cart')().items);
+                    console.log(items);
                     console.log(shieldImageData);
                     console.log(greenImageData);
-                    for (let item in customerData.get('cart')().items) {
-                        window.checkoutConfig.imageData[item.item_id] = item.product_image;
-                    }
+                    items.forEach((item) => {
+                        console.log(item);
+                        console.log(item.item_id);
+                        console.log(item.product_image);
+                        window.checkoutConfig.imageData[parseInt(item.item_id)] = item.product_image;
+                    });
 
                     return true;
                 }
