@@ -58,11 +58,11 @@ define(
                     //     total_qty += item.qty;
                     // })
                     console.log('shouldu update to...');
-                    var oldTotals = quote.getTotals();
+                    var oldTotals = quote.totals();
                     console.log(oldTotals);
                     var newTotals = oldTotals.items_qty = total_qty;
                     console.log(newTotals);
-                    quote.setTotals(newTotals);
+                    quote.totals(newTotals);
                     // window.checkoutConfig.totalsData.items_qty = total_qty;
 
                     return true;
