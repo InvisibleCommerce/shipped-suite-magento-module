@@ -48,6 +48,11 @@ define(
                     console.log(customerData.get('cart')().items);
                     console.log(shieldImageData);
                     console.log(greenImageData);
+                    for (let item in customerData.get('cart')().items) {
+                        window.checkoutConfig.imageData[item.item_id] = item.product_image;
+                    }
+
+                    return true;
                 }
 
                 require([
