@@ -21,7 +21,7 @@
             <backend>
                 <order_sync>1</order_sync>
                 <shipment_sync>1</shipment_sync>
-                <reveral_sync>1</reveral_sync>
+                <reversal_sync>1</reversal_sync>
             </backend>
         </shipped_suite_backend>
     </default>
