@@ -15,6 +15,7 @@
                     <source_model>InvisibleCommerce\ShippedSuite\Model\Adminhtml\System\Config\Source\Environment</source_model>
                     <label>Environment</label>
                     <comment>There are 2 separate environments, "staging" and "production". Perform all development against the "staging" environment, do not send any production/sensitive data to it.</comment>
+                    <tooltip>Go to https://api-docs.shippedsuite.com/docs/environments for more info on environments.</tooltip>
                 </field>
                 <field id="public_key" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Public Key</label>
@@ -64,8 +65,8 @@
                 <field id="default" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                     <label>Default State</label>
-                    <comment>Recommended setting is "Disable" where Shipped is automatically added to the order.</comment>
-                    <tooltip>Selecting "Enable" will require the customer to manually add Shipped to the order.</tooltip>
+                    <comment>Recommended setting is "Enable" where Shipped Shield/Green is automatically added to the orders.</comment>
+                    <tooltip>Selecting "Disable" will require the customer to manually add Shipped Shield/Green to the order.</tooltip>
                 </field>
                 <field id="mandatory" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
