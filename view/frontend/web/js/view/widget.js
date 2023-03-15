@@ -5,6 +5,7 @@ define(
         'uiComponent',
         'Magento_Checkout/js/action/get-totals',
         'Magento_Checkout/js/model/cart/cache',
+        'Magento_Checkout/js/model/quote',
         'Magento_Customer/js/customer-data'
     ],
     function(
@@ -13,6 +14,7 @@ define(
         Component,
         getTotalsAction,
         cartCache,
+        quote,
         customerData
     ) {
         'use strict';
@@ -21,7 +23,15 @@ define(
                 template: 'InvisibleCommerce_ShippedSuite/widget'
             },
             initialize: function() {
-                var config = window.checkoutConfig.shippedSuite;
+                var checkoutConfig = window.checkoutConfig;
+                var imageData = checkoutConfig.imageData;
+                var config = checkoutConfig.shippedSuite;
+
+                var shieldImageData = imageData.find(elem => elem.alt === config.shieldName);
+                var greenImageData = imageData.find(elem => elem.alt === config.greenName);
+                console.log(shieldImageData);
+                console.log(greenImageData);
+
                 if (typeof shippedConfig !== 'undefined') {
                     // variable is undefined
                     var localShippedConfig = Object.assign(config.shippedConfig, shippedConfig || {});
@@ -30,6 +40,13 @@ define(
                 }
 
                 this._super();
+
+                var callback = () => {
+                    console.log('callback executed');
+                    console.log(quote);
+                    console.log(shieldImageData);
+                    console.log(greenImageData);
+                }
 
                 require([
                     'jquery',
@@ -66,7 +83,7 @@ define(
                                     response.json();
                                 }).then(() => {
                                     cartCache.set('totals',null);
-                                    getTotalsAction([], $.Deferred());
+                                    getTotalsAction([callback], $.Deferred());
                                 });
                             });
                         });

@@ -27,6 +27,8 @@ class WidgetConfigProvider implements ConfigProviderInterface
     {
         $config = [
             'shippedSuite' => [
+                'shieldName' => Product::SHIPPED_SHIELD_NAME,
+                'greenName' => Product::SHIPPED_GREEN_NAME,
                 'shippedConfig' => [
                     'isWidgetOff' => $this->scopeConfig->getValue('shipped_suite_widget/widget/widget_display') === '0',
                     'isShield' => $this->scopeConfig->getValue('shipped_suite_widget/widget/shield') === '1',
