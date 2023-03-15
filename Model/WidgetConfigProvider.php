@@ -37,7 +37,11 @@ class WidgetConfigProvider implements ConfigProviderInterface
                     'isMandatory' => $this->scopeConfig->getValue('shipped_suite_widget/widget/mandatory') == '1',
                     'publicKey' => $this->scopeConfig->getValue('shipped_suite_api/api/public_key'),
                     'currency' => $this->storeManager->getStore()->getCurrentCurrency()->getCode(),
-                    'widgetSelector' => '.shipped-widget'
+                    'widgetSelector' => '.shipped-widget',
+                    'widgetStyle' => [
+                        'marginRight' => 'auto',
+                        'marginLeft' => '0'
+                    ]
                 ],
                 'jsUrl' => $this->jsUrl()
             ]
