@@ -5,7 +5,6 @@ define(
         'uiComponent',
         'Magento_Checkout/js/action/get-totals',
         'Magento_Checkout/js/model/cart/cache',
-        'Magento_Checkout/js/model/quote',
         'Magento_Customer/js/customer-data'
     ],
     function(
@@ -14,7 +13,6 @@ define(
         Component,
         getTotalsAction,
         cartCache,
-        quote,
         customerData
     ) {
         'use strict';
@@ -43,7 +41,7 @@ define(
 
                 var callback = () => {
                     console.log('callback executed');
-                    console.log(quote);
+                    console.log(customerData.get('cart')().items);
                     console.log(shieldImageData);
                     console.log(greenImageData);
                 }
