@@ -5,7 +5,8 @@ define(
         'uiComponent',
         './get-totals',
         'Magento_Checkout/js/model/cart/cache',
-        'Magento_Customer/js/customer-data'
+        'Magento_Customer/js/customer-data',
+        'Magento_Checkout/js/model/totals',
     ],
     function(
         ko,
@@ -13,7 +14,8 @@ define(
         Component,
         getTotalsAction,
         cartCache,
-        customerData
+        customerData,
+        totals
     ) {
         'use strict';
         return Component.extend({
@@ -24,6 +26,9 @@ define(
                 var checkoutConfig = window.checkoutConfig;
                 var config = checkoutConfig.shippedSuite;
 
+                console.log(totals.totals()['items_qty']);
+                console.log(totals.getItems()().length);
+                console.log(totals.getItems()());
                 console.log(customerData.get('cart')().items);
 
                 if (typeof shippedConfig !== 'undefined') {
