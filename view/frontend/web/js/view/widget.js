@@ -24,7 +24,7 @@ define(
                 var checkoutConfig = window.checkoutConfig;
                 var config = checkoutConfig.shippedSuite;
 
-                console.log('??????');
+                console.log(customerData.get('cart')().items);
 
                 if (typeof shippedConfig !== 'undefined') {
                     // variable is undefined
@@ -36,18 +36,12 @@ define(
                 this._super();
 
                 var callback = (response) => {
-                    console.log('response');
-                    console.log(response);
                     var items = response.items;
-                    console.log('callback executed');
-                    console.log(items);
                     items.forEach((item) => {
                         if (item.name === config.shieldName) {
-                            console.log('shield match');
                             window.checkoutConfig.imageData[parseInt(item.item_id)] = config.shieldImageData;
                         }
                         if (item.name === config.greenName) {
-                            console.log('green match');
                             window.checkoutConfig.imageData[parseInt(item.item_id)] = config.greenImageData;
                         }
                     });
