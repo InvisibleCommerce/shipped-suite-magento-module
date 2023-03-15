@@ -7,6 +7,7 @@ define(
         'Magento_Checkout/js/model/cart/cache',
         'Magento_Customer/js/customer-data',
         'Magento_Checkout/js/model/totals',
+        'Magento_Checkout/js/model/quote',
     ],
     function(
         ko,
@@ -15,7 +16,8 @@ define(
         getTotalsAction,
         cartCache,
         customerData,
-        totals
+        totals,
+        quote
     ) {
         'use strict';
         return Component.extend({
@@ -51,13 +53,17 @@ define(
                         }
                     });
 
-                    var totals = 0;
-                    items.forEach((item) => {
-                        totals += item.qty;
-                    })
+                    // var total_qty = 0;
+                    // items.forEach((item) => {
+                    //     total_qty += item.qty;
+                    // })
                     console.log('shouldu update to...');
-                    console.log(totals);
-                    window.checkoutConfig.totalsData.items_qty = totals;
+                    var oldTotals = quote.getTotals();
+                    console.log(oldTotals);
+                    var newTotals = oldTotals.items_qty = total_qty;
+                    console.log(newTotals);
+                    quote.setTotals(newTotals);
+                    // window.checkoutConfig.totalsData.items_qty = total_qty;
 
                     return true;
                 }
