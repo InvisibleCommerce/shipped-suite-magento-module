@@ -25,8 +25,12 @@ define(
                 var imageData = checkoutConfig.imageData;
                 var config = checkoutConfig.shippedSuite;
 
-                var shieldImageData = imageData.find(elem => elem.alt === config.shieldName);
-                var greenImageData = imageData.find(elem => elem.alt === config.greenName);
+                var shieldImageData = Object.entries(imageData).find(([key, value]) => {
+                    return value.alt === config.shieldName
+                });
+                var greenImageData = Object.entries(imageData).find(([key, value]) => {
+                    return value.alt === config.greenName
+                });
                 console.log(shieldImageData);
                 console.log(greenImageData);
 
