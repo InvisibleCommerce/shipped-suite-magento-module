@@ -4,20 +4,14 @@ define(
         'jquery',
         'uiComponent',
         './get-totals',
-        'Magento_Checkout/js/model/cart/cache',
-        'Magento_Customer/js/customer-data',
-        'Magento_Checkout/js/model/totals',
-        'Magento_Checkout/js/model/quote',
+        'Magento_Customer/js/customer-data'
     ],
     function(
         ko,
         $,
         Component,
         getTotalsAction,
-        cartCache,
-        customerData,
-        totals,
-        quote
+        customerData
     ) {
         'use strict';
         return Component.extend({
@@ -27,11 +21,6 @@ define(
             initialize: function() {
                 var checkoutConfig = window.checkoutConfig;
                 var config = checkoutConfig.shippedSuite;
-
-                console.log(totals.totals()['items_qty']);
-                console.log(totals.getItems()().length);
-                console.log(totals.getItems()());
-                console.log(customerData.get('cart')().items);
 
                 if (typeof shippedConfig !== 'undefined') {
                     // variable is undefined
@@ -52,17 +41,6 @@ define(
                             window.checkoutConfig.imageData[parseInt(item.item_id)] = config.greenImageData;
                         }
                     });
-
-                    var total_qty = 0;
-                    items.forEach((item) => {
-                        total_qty += item.qty;
-                    })
-                    console.log('shouldu update to...');
-                    var newTotals = quote.totals();
-                    console.log(newTotals);
-                    newTotals.items_qty = total_qty;
-                    console.log(newTotals);
-                    quote.totals(newTotals);
 
                     return true;
                 }
@@ -101,7 +79,6 @@ define(
                                 }).then((response) => {
                                     response.json();
                                 }).then(() => {
-                                    cartCache.set('totals',null);
                                     getTotalsAction([callback], $.Deferred());
                                 });
                             });
