@@ -22,17 +22,7 @@ define(
             },
             initialize: function() {
                 var checkoutConfig = window.checkoutConfig;
-                var imageData = checkoutConfig.imageData;
                 var config = checkoutConfig.shippedSuite;
-
-                var shieldImageData = Object.entries(imageData).find(([key, value]) => {
-                    return value.alt === config.shieldName
-                });
-                var greenImageData = Object.entries(imageData).find(([key, value]) => {
-                    return value.alt === config.greenName
-                });
-                console.log(shieldImageData);
-                console.log(greenImageData);
 
                 if (typeof shippedConfig !== 'undefined') {
                     // variable is undefined
@@ -46,16 +36,18 @@ define(
                 var callback = (response) => {
                     console.log('response');
                     console.log(response);
-                    var items = customerData.get('cart')().items;
+                    var items = response.items;
                     console.log('callback executed');
                     console.log(items);
-                    console.log(shieldImageData);
-                    console.log(greenImageData);
                     items.forEach((item) => {
-                        console.log(item);
-                        console.log(item.item_id);
-                        console.log(item.product_image);
-                        window.checkoutConfig.imageData[parseInt(item.item_id)] = item.product_image;
+                        if (item.name === config.shieldName) {
+                            console.log('shield match');
+                            window.checkoutConfig.imageData[parseInt(item.item_id)] = config.shieldImageData;
+                        }
+                        if (item.name === config.greenName) {
+                            console.log('green match');
+                            window.checkoutConfig.imageData[parseInt(item.item_id)] = config.greenImageData;
+                        }
                     });
 
                     return true;

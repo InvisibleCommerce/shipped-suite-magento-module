@@ -15,20 +15,29 @@ class WidgetConfigProvider implements ConfigProviderInterface
 
     private ScopeConfigInterface $scopeConfig;
     private StoreManagerInterface $storeManager;
+    private \Magento\Catalog\Helper\Image $imageHelper;
+    private ProductRepositoryInterface $productRepository;
 
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        \Magento\Catalog\Helper\Image $imageHelper,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
+        $this->imageHelper = $imageHelper;
+        $this->productRepository = $productRepository;
     }
     public function getConfig()
     {
+
         $config = [
             'shippedSuite' => [
                 'shieldName' => Product::SHIPPED_SHIELD_NAME,
                 'greenName' => Product::SHIPPED_GREEN_NAME,
+                'shieldImageData' => $this->getImageData( $this->productRepository->get(Product::SHIPPED_SHIELD_SKU)),
+                'greenImageData' => $this->getImageData( $this->productRepository->get(Product::SHIPPED_GREEN_SKU)),
                 'shippedConfig' => [
                     'isWidgetOff' => $this->scopeConfig->getValue('shipped_suite_widget/widget/widget_display') === '0',
                     'isShield' => $this->scopeConfig->getValue('shipped_suite_widget/widget/shield') === '1',
@@ -64,5 +73,20 @@ class WidgetConfigProvider implements ConfigProviderInterface
             ShippedSuiteAPI::ENVIRONMENT_PRODUCTION => self::PRODUCTION_URL,
             default => throw new Exception('Unknown environment'),
         };
+    }
+
+    private function getImageData(ProductInterface $product): array
+    {
+        $imageHelper = $this->imageHelper->init(
+            $product,
+            'mini_cart_product_thumbnail'
+        );
+
+        return [
+            'src' => $imageHelper->getUrl(),
+            'alt' => $imageHelper->getLabel(),
+            'width' => $imageHelper->getWidth(),
+            'height' => $imageHelper->getHeight(),
+        ];
     }
 }

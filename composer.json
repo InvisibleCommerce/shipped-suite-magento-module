@@ -2,7 +2,7 @@
     "name": "invisible-commerce/shipped-suite",
     "description": "Shipped Suite Magento 2 integration",
     "require": {
-        "php": "*"
+        "php": "^7.4"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
