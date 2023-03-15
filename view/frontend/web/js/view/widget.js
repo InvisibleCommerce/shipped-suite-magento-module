@@ -4,14 +4,18 @@ define(
         'jquery',
         'uiComponent',
         './get-totals',
-        'Magento_Customer/js/customer-data'
+        'Magento_Customer/js/customer-data',
+        'Magento_Checkout/js/model/totals',
+        'Magento_Checkout/js/model/quote'
     ],
     function(
         ko,
         $,
         Component,
         getTotalsAction,
-        customerData
+        customerData,
+        totals,
+        quote
     ) {
         'use strict';
         return Component.extend({
@@ -41,6 +45,10 @@ define(
                             window.checkoutConfig.imageData[parseInt(item.item_id)] = config.greenImageData;
                         }
                     });
+
+                    var newTotals = totals.totals();
+                    newTotals.items_qty = 45;
+                    totals.setTotals(newTotals);
 
                     return true;
                 }
