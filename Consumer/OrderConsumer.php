@@ -13,6 +13,7 @@ use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\OrderRepositoryFactory;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class OrderConsumer extends AbstractConsumer
 {
@@ -21,6 +22,7 @@ class OrderConsumer extends AbstractConsumer
     private ShipmentRepositoryInterface $shipmentRepository;
     private CreditmemoRepositoryInterface $creditmemoRepository;
     private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private ScopeConfigInterface $scopeConfig;
 
     public function __construct(
         LoggerInterface $logger,
@@ -29,18 +31,24 @@ class OrderConsumer extends AbstractConsumer
         OrdersAPI $ordersAPI,
         ShipmentRepositoryInterface $shipmentRepository,
         CreditmemoRepositoryInterface $creditmemoRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->orderRepository = $orderRepository;
         $this->ordersAPI = $ordersAPI;
         $this->shipmentRepository = $shipmentRepository;
         $this->creditmemoRepository = $creditmemoRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($logger, $publisher);
     }
 
     protected function execute(string $orderId): void
     {
+        if ($this->scopeConfig->getValue('shipped_suite_backend/backend/order_sync') !== '1') {
+            return;
+        }
+
         $orderRepository = $this->orderRepository->create();
         $order = $orderRepository->get(0);
 

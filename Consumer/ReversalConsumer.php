@@ -7,25 +7,33 @@ use InvisibleCommerce\ShippedSuite\Observer\CreditMemoObserver;
 use Magento\Framework\MessageQueue\Publisher;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ReversalConsumer extends AbstractConsumer
 {
     private CreditmemoRepositoryInterface $creditMemoRepository;
     private ReversalsAPI $reversalsAPI;
+    private ScopeConfigInterface $scopeConfig;
 
     public function __construct(
         LoggerInterface $logger,
         Publisher $publisher,
         CreditmemoRepositoryInterface $creditMemoRepository,
-        ReversalsAPI $reversalsAPI
+        ReversalsAPI $reversalsAPI,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->creditMemoRepository = $creditMemoRepository;
         $this->reversalsAPI = $reversalsAPI;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($logger, $publisher);
     }
 
     protected function execute(string $creditMemoId): void
     {
+        if ($this->scopeConfig->getValue('shipped_suite_backend/backend/reversal_sync') !== '1') {
+            return;
+        }
+
         $creditMemo = $this->creditMemoRepository->get((int)$creditMemoId);
         $this->reversalsAPI->upsert($creditMemo);
     }

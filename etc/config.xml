@@ -17,5 +17,12 @@
                 <informational>0</informational>
             </widget>
         </shipped_suite_widget>
+        <shipped_suite_backend>
+            <backend>
+                <order_sync>1</order_sync>
+                <shipment_sync>1</shipment_sync>
+                <reveral_sync>1</reveral_sync>
+            </backend>
+        </shipped_suite_backend>
     </default>
 </config>
