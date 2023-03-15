@@ -14,7 +14,7 @@ define(
             },
             initialize: function() {
                 var config = window.checkoutConfig.shippedSuite;
-                console.log(shippedConfig);
+                console.log(shippedConfig || {});
                 console.log(config.shippedConfig);
                 var localShippedConfig = Object.assign(config.shippedConfig, shippedConfig || {});
                 console.log(localShippedConfig);
