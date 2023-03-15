@@ -22,6 +22,12 @@ define(
                 } else {
                     var localShippedConfig = config.shippedConfig;
                 }
+                localShippedConfig = Object.assign(localShippedConfig, {
+                    widgetStyle: {
+                        marginRight: 'auto',
+                        marginLeft: '0'
+                    }
+                });
 
                 console.log(localShippedConfig);
                 this._super();
