@@ -58,9 +58,9 @@ define(
                         total_qty += item.qty;
                     })
                     console.log('shouldu update to...');
-                    var oldTotals = quote.totals();
-                    console.log(oldTotals);
-                    var newTotals = oldTotals.items_qty = total_qty;
+                    var newTotals = quote.totals();
+                    console.log(newTotals);
+                    newTotals.items_qty = total_qty;
                     console.log(newTotals);
                     quote.totals(newTotals);
 
