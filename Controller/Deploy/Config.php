@@ -48,18 +48,18 @@ class Config extends Action implements HttpGetActionInterface
 
         $resultJson = $this->jsonFactory->create();
         $resultJson = $resultJson->setHttpResponseCode(200);
+        $consumers = [];
+        foreach ($this->consumerConfig->getConsumers() as $consumer) {
+            $consumers[] = $consumer->getName();
+        }
         $resultJson = $resultJson->setData([
             '$runByCron' => $runByCron,
             '$multipleProcesses' => $multipleProcesses,
             '$maxMessages' => $maxMessages,
             '$allowedConsumers' => $allowedConsumers,
-            'consumer' => array_map([$this, 'getConsumerName'], $this->consumerConfig->getConsumers()->getAllItems())
+            'consumer' => $consumers
         ]);
 
         return $resultJson;
-    }
-
-    private function getConsumerName($consumer) {
-        return $consumer->getName();
     }
 }
