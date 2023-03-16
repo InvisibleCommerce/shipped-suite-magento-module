@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Consumer;
 
@@ -6,6 +7,7 @@ use InvisibleCommerce\ShippedSuite\Observer\CreditMemoObserver;
 use InvisibleCommerce\ShippedSuite\Service\ReversalsAPI;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\MessageQueue\Publisher;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -20,12 +22,14 @@ class ReversalConsumer extends AbstractConsumer
         Publisher $publisher,
         CreditmemoRepositoryInterface $creditMemoRepository,
         ReversalsAPI $reversalsAPI,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        SerializerInterface $serializer
     ) {
         $this->creditMemoRepository = $creditMemoRepository;
         $this->reversalsAPI = $reversalsAPI;
         $this->scopeConfig = $scopeConfig;
-        parent::__construct($logger, $publisher);
+        $this->serializer = $serializer;
+        parent::__construct($logger, $publisher, $serializer);
     }
 
     protected function execute(string $creditMemoId): void

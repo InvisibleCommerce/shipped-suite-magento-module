@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Consumer;
 
@@ -10,6 +11,7 @@ use InvisibleCommerce\ShippedSuite\Service\OrdersAPI;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\MessageQueue\Publisher;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\OrderRepositoryFactory;
@@ -32,7 +34,8 @@ class OrderConsumer extends AbstractConsumer
         ShipmentRepositoryInterface $shipmentRepository,
         CreditmemoRepositoryInterface $creditmemoRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        SerializerInterface $serializer
     ) {
         $this->orderRepository = $orderRepository;
         $this->ordersAPI = $ordersAPI;
@@ -40,7 +43,8 @@ class OrderConsumer extends AbstractConsumer
         $this->creditmemoRepository = $creditmemoRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->scopeConfig = $scopeConfig;
-        parent::__construct($logger, $publisher);
+        $this->serializer = $serializer;
+        parent::__construct($logger, $publisher, $serializer);
     }
 
     protected function execute(string $orderId): void
@@ -60,7 +64,7 @@ class OrderConsumer extends AbstractConsumer
             $message = [
                 'message' => $item->getProductId()
             ];
-            $this->publisher->publish(ProductObserver::TOPIC_NAME, json_encode($message));
+            $this->publisher->publish(ProductObserver::TOPIC_NAME, $this->serializer->serialize($message));
         }
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('order_id', $orderId)->create();
@@ -71,7 +75,7 @@ class OrderConsumer extends AbstractConsumer
             $message = [
                 'message' => $shipment->getId()
             ];
-            $this->publisher->publish(ShipmentObserver::TOPIC_NAME, json_encode($message));
+            $this->publisher->publish(ShipmentObserver::TOPIC_NAME, $this->serializer->serialize($message));
         }
 
         // enqueue credit memo updates
@@ -80,7 +84,7 @@ class OrderConsumer extends AbstractConsumer
             $message = [
                 'message' => $creditmemo->getId()
             ];
-            $this->publisher->publish(CreditMemoObserver::TOPIC_NAME, json_encode($message));
+            $this->publisher->publish(CreditMemoObserver::TOPIC_NAME, $this->serializer->serialize($message));
         }
     }
 

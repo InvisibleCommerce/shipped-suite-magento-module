@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Consumer;
 
@@ -6,6 +7,7 @@ use InvisibleCommerce\ShippedSuite\Observer\TrackObserver;
 use InvisibleCommerce\ShippedSuite\Service\ShipmentsAPI;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\MessageQueue\Publisher;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
@@ -20,12 +22,14 @@ class ShipmentConsumer extends AbstractConsumer
         Publisher $publisher,
         ShipmentRepositoryInterface $shipmentRepository,
         ShipmentsAPI $shipmentsAPI,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        SerializerInterface $serializer
     ) {
         $this->shipmentRepository = $shipmentRepository;
         $this->shipmentsAPI = $shipmentsAPI;
         $this->scopeConfig = $scopeConfig;
-        parent::__construct($logger, $publisher);
+        $this->serializer = $serializer;
+        parent::__construct($logger, $publisher, $serializer);
     }
 
     public function execute(string $shipmentId): void

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Consumer;
 
@@ -7,6 +8,7 @@ use InvisibleCommerce\ShippedSuite\Service\ProductsAPI;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\MessageQueue\Publisher;
+use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
 class ProductConsumer extends AbstractConsumer
@@ -20,12 +22,14 @@ class ProductConsumer extends AbstractConsumer
         Publisher $publisher,
         ProductRepositoryInterface $productRepository,
         ProductsAPI $productsAPI,
-        Configurable $configurable
+        Configurable $configurable,
+        SerializerInterface $serializer
     ) {
         $this->productRepository = $productRepository;
         $this->productsAPI = $productsAPI;
         $this->configurable = $configurable;
-        parent::__construct($logger, $publisher);
+        $this->serializer = $serializer;
+        parent::__construct($logger, $publisher, $serializer);
     }
 
     protected function execute(string $productId): void
