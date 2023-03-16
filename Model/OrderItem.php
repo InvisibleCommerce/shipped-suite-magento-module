@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Model;
 
@@ -51,9 +52,9 @@ class OrderItem
     {
         $parent = $item->getParentItem();
         if ($parent && $parent->getProductType() == Configurable::TYPE_CODE) {
-            return $parent->getItemId();
+            return (int)$parent->getItemId();
         } else {
-            return $item->getItemId();
+            return (int)$item->getItemId();
         }
     }
 
@@ -61,9 +62,9 @@ class OrderItem
     {
         $parent = $item->getParentItem();
         if ($parent) {
-            return $parent->getProductId();
+            return (int)$parent->getProductId();
         } else {
-            return $item->getProductId();
+            return (int)$item->getProductId();
         }
     }
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Model;
 
@@ -6,18 +7,14 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
-use Psr\Log\LoggerInterface;
 
 class CreditMemo
 {
     private OrderItem $orderItemModel;
-    private LoggerInterface $logger;
 
     public function __construct(
-        LoggerInterface $logger,
         OrderItem $orderItemModel
     ) {
-        $this->logger = $logger;
         $this->orderItemModel = $orderItemModel;
     }
 

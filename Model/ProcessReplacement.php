@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Model;
 
@@ -8,11 +9,12 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManager;
@@ -23,13 +25,14 @@ class ProcessReplacement
     private StoreManager $storeManager;
     private OrderRepositoryInterface $orderRepository;
     private CustomerRepositoryInterface $customerRepository;
-    private \Magento\Catalog\Model\Product $product;
     private ProductRepositoryInterface $productRepository;
     private Configurable $configurable;
     private ReplacementsAPI $replacementsAPI;
     private CartManagementInterface $cartManagement;
     private CartRepositoryInterface $cartRepository;
     private LoggerInterface $logger;
+    private SerializerInterface $serializer;
+    private QuoteRepository $quoteRepository;
 
     const TOPIC_NAME = 'replacement.requested';
 
@@ -37,24 +40,26 @@ class ProcessReplacement
         StoreManager $storeManager,
         OrderRepositoryInterface $orderRepository,
         CustomerRepositoryInterface $customerRepository,
-        \Magento\Catalog\Model\Product $product,
         ProductRepository $productRepository,
         Configurable $configurable,
         ReplacementsAPI $replacementsAPI,
         CartManagementInterface $cartManagement,
         CartRepositoryInterface $cartRepository,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SerializerInterface $serializer,
+        QuoteRepository $quoteRepository
     ) {
         $this->storeManager = $storeManager;
         $this->orderRepository = $orderRepository;
         $this->customerRepository = $customerRepository;
-        $this->product = $product;
         $this->productRepository = $productRepository;
         $this->configurable = $configurable;
         $this->cartManagement = $cartManagement;
         $this->cartRepository = $cartRepository;
         $this->logger = $logger;
         $this->replacementsAPI = $replacementsAPI;
+        $this->serializer = $serializer;
+        $this->quoteRepository = $quoteRepository;
     }
 
     public function execute(array $payload): void
@@ -71,14 +76,14 @@ class ProcessReplacement
         $this->logger->debug('order ' . $order->getIncrementId());
 
         $affectedItems = $payload['affected_items'];
-        $this->logger->debug('affected items ' . json_encode($affectedItems));
+        $this->logger->debug('affected items ' . $this->serializer->serialize($affectedItems));
 
         $quote = $this->createQuote();
 
         if (str_contains($payload['order']['customer']['external_id'], 'order-')) {
             $this->setupGuestCheckout($quote, $payload);
         } else {
-            $this->setupCustomerCheckout($quote, $order, $payload);
+            $this->setupCustomerCheckout($quote, $payload);
         }
 
         foreach ($affectedItems as $affectedItem) {
@@ -115,7 +120,7 @@ class ProcessReplacement
         array $affectedItem,
         CartInterface &$quote
     ): void {
-        $product = $this->product->load((int)$affectedItem['external_variant_id']);
+        $product = $this->productRepository->getById((int)$affectedItem['external_variant_id']);
 
         $this->logger->debug('adding ' . $product->getName() . ' qty ' . $affectedItem['quantity'] . ' price ' . $affectedItem['unit_price']);
         $product->setPrice($affectedItem['unit_price']);
@@ -155,7 +160,7 @@ class ProcessReplacement
         }
         $params['super_attribute'] = $options;
 
-        $this->logger->debug(json_encode($params));
+        $this->logger->debug($this->serializer->serialize($params));
         return $quote->addProduct(
             $product,
             new \Magento\Framework\DataObject($params)
@@ -165,7 +170,7 @@ class ProcessReplacement
     private function finalizeQuote(CartInterface &$quote): void
     {
         $quote->setInventoryProcessed(false);
-        $quote->save();
+        $this->quoteRepository->save($quote);
         $quote->collectTotals();
     }
 
@@ -203,7 +208,7 @@ class ProcessReplacement
         $this->setUpGuestAddresses($quote, $payload);
     }
 
-    private function setupCustomerCheckout(CartInterface &$quote, OrderInterface $order, array $payload): void
+    private function setupCustomerCheckout(CartInterface &$quote, array $payload): void
     {
         $this->logger->debug('existing customer');
 

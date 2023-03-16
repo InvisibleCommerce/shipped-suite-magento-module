@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Model;
 
@@ -6,24 +7,20 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Psr\Log\LoggerInterface;
 
 class Order
 {
     private TransactionRepositoryInterface $repository;
     private SearchCriteriaBuilder $searchCriteriaBuilder;
-    private LoggerInterface $logger;
     private OrderItem $orderItemModel;
 
     public function __construct(
         TransactionRepositoryInterface $repository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        LoggerInterface $logger,
         OrderItem $orderItemModel
     ) {
         $this->repository = $repository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->logger = $logger;
         $this->orderItemModel = $orderItemModel;
     }
     public function json(OrderInterface $order): array

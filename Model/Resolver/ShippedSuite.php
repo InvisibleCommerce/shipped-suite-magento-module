@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Model\Resolver;
 
@@ -7,6 +8,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\QuoteMutexInterface;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
 class ShippedSuite implements ResolverInterface
@@ -14,15 +16,18 @@ class ShippedSuite implements ResolverInterface
     private GetCartForUser $getCartForUser;
     private QuoteMutexInterface $quoteMutex;
     private CartHelper $cartHelper;
+    private QuoteRepository $quoteRepository;
 
     public function __construct(
         GetCartForUser $getCartForUser,
         QuoteMutexInterface $quoteMutex,
-        CartHelper $cartHelper
+        CartHelper $cartHelper,
+        QuoteRepository $quoteRepository
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->quoteMutex = $quoteMutex;
         $this->cartHelper = $cartHelper;
+        $this->quoteRepository = $quoteRepository;
     }
 
     public function resolve(
@@ -48,7 +53,7 @@ class ShippedSuite implements ResolverInterface
         if ($args['input']['selected']) {
             $cart = $this->cartHelper->addManagedProducts($cart);
         }
-        $cart->save();
+        $this->quoteRepository->save($cart);
 
         return [
             'cart' => [
