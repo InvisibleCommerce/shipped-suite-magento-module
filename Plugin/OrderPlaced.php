@@ -20,7 +20,10 @@ class OrderPlaced
         OrderManagementInterface $subject,
         OrderInterface $return
     ) {
-        $this->publisher->publish(self::TOPIC_NAME, $return->getId());
+        $message = [
+            'message' => $return->getId()
+        ];
+        $this->publisher->publish(self::TOPIC_NAME, json_encode($message));
 
         return $return;
     }
