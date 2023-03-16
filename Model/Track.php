@@ -9,20 +9,16 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Api\Data\TrackInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Psr\Log\LoggerInterface;
 
 class Track
 {
-    private LoggerInterface $logger;
     private OrderRepositoryInterface $orderRepository;
     private OrderItem $orderItemModel;
 
     public function __construct(
-        LoggerInterface $logger,
         OrderRepositoryInterface $orderRepository,
         OrderItem $orderItemModel
     ) {
-        $this->logger = $logger;
         $this->orderRepository = $orderRepository;
         $this->orderItemModel = $orderItemModel;
     }

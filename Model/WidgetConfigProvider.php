@@ -35,8 +35,13 @@ class WidgetConfigProvider implements ConfigProviderInterface
     }
     public function getConfig()
     {
+        try {
+            $currency = $this->storeManager->getStore()->getCurrentCurrency()->getCode();
+        } catch (\Exception $e) {
+            $currency = 'USD';
+        }
 
-        $config = [
+        return [
             'shippedSuite' => [
                 'shieldName' => Product::SHIPPED_SHIELD_NAME,
                 'greenName' => Product::SHIPPED_GREEN_NAME,
@@ -51,7 +56,7 @@ class WidgetConfigProvider implements ConfigProviderInterface
                     'isInformational' => $this->scopeConfig->getValue('shipped_suite_widget/widget/informational') == '1',
                     'isMandatory' => $this->scopeConfig->getValue('shipped_suite_widget/widget/mandatory') == '1',
                     'publicKey' => $this->scopeConfig->getValue('shipped_suite_api/api/public_key'),
-                    'currency' => $this->storeManager->getStore()->getCurrentCurrency()->getCode(),
+                    'currency' => $currency,
                     'widgetSelector' => '.shipped-widget',
                     'widgetStyle' => [
                         'marginRight' => 'auto',
@@ -61,8 +66,6 @@ class WidgetConfigProvider implements ConfigProviderInterface
                 'jsUrl' => $this->jsUrl()
             ]
         ];
-
-        return $config;
     }
 
     /**
