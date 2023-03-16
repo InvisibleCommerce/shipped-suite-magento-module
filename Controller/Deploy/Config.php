@@ -12,6 +12,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\MessageQueue\Publisher;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface;
 
 class Config extends Action implements HttpGetActionInterface
 {
@@ -19,6 +20,7 @@ class Config extends Action implements HttpGetActionInterface
     private LoggerInterface $logger;
     private Publisher $publisher;
     private DeploymentConfig $deploymentConfig;
+    private ConfigInterface $consumerConfig;
 
     const TOPIC_NAME = 'shippedsuite.webhook.process';
 
@@ -27,12 +29,14 @@ class Config extends Action implements HttpGetActionInterface
         JsonFactory $jsonFactory,
         LoggerInterface $logger,
         Publisher $publisher,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        ConfigInterface $consumerConfig
     ) {
         $this->logger = $logger;
         $this->jsonFactory = $jsonFactory;
         $this->publisher = $publisher;
         $this->deploymentConfig = $deploymentConfig;
+        $this->consumerConfig = $consumerConfig;
         parent::__construct($context);
     }
     public function execute()
@@ -48,9 +52,14 @@ class Config extends Action implements HttpGetActionInterface
             '$runByCron' => $runByCron,
             '$multipleProcesses' => $multipleProcesses,
             '$maxMessages' => $maxMessages,
-            '$allowedConsumers' => $allowedConsumers
+            '$allowedConsumers' => $allowedConsumers,
+            'consumer' => array_map([$this, 'getConsumerName'], $this->consumerConfig->getConsumers())
         ]);
 
         return $resultJson;
+    }
+
+    private function getConsumerName($consumer) {
+        return $consumer->getName();
     }
 }
