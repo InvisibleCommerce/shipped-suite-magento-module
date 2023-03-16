@@ -103,25 +103,38 @@ class Config extends Action implements HttpGetActionInterface
 
     private function canBeRun(ConsumerConfigItemInterface $consumerConfig, array $allowedConsumers = []): bool
     {
+        $this->logger->debug('1');
         $consumerName = $consumerConfig->getName();
+        $this->logger->debug('2');
         if (!empty($allowedConsumers) && !in_array($consumerName, $allowedConsumers)) {
+            $this->logger->debug('3');
             return false;
         }
 
+        $this->logger->debug('4');
         $connectionName = $consumerConfig->getConnection();
+        $this->logger->debug('5');
         $this->mqConnectionTypeResolver->getConnectionType($connectionName);
+        $this->logger->debug('6');
 
         $globalOnlySpawnWhenMessageAvailable = (bool)$this->deploymentConfig->get(
             'queue/only_spawn_when_message_available',
             true
         );
+        $this->logger->debug('7');
         if ($consumerConfig->getOnlySpawnWhenMessageAvailable() === true
             || ($consumerConfig->getOnlySpawnWhenMessageAvailable() === null && $globalOnlySpawnWhenMessageAvailable)) {
+            $this->logger->debug('8');
+            $this->logger->debug($this->checkIsAvailableMessages->execute(
+                $connectionName,
+                $consumerConfig->getQueue()
+            ));
             return $this->checkIsAvailableMessages->execute(
                 $connectionName,
                 $consumerConfig->getQueue()
             );
         }
+        $this->logger->debug('9');
 
         return true;
     }
