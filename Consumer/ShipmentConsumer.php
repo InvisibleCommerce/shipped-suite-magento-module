@@ -2,12 +2,12 @@
 
 namespace InvisibleCommerce\ShippedSuite\Consumer;
 
-use InvisibleCommerce\ShippedSuite\Api\ShipmentsAPI;
 use InvisibleCommerce\ShippedSuite\Observer\TrackObserver;
+use InvisibleCommerce\ShippedSuite\Service\ShipmentsAPI;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\MessageQueue\Publisher;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ShipmentConsumer extends AbstractConsumer
 {

@@ -56,7 +56,7 @@ class InstallData implements InstallDataInterface
         $product->setTypeId(Type::TYPE_VIRTUAL);
         $product->setVisibility(4);
         $product->setPrice(0);
-        $product->setAttributeSetId(4);
+        $product->setAttributeSetId($product->getDefaultAttributeSetId());
         $product->setStatus(Status::STATUS_ENABLED);
         $product->setWeight(0);
 

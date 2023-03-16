@@ -1,29 +1,24 @@
 <?php
+declare(strict_types=1);
 
-namespace InvisibleCommerce\ShippedSuite\Api;
+namespace InvisibleCommerce\ShippedSuite\Service;
 
-use GuzzleHttp\ClientFactory;
-use GuzzleHttp\Psr7\ResponseFactory;
 use InvisibleCommerce\ShippedSuite\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Framework\Webapi\Rest\Request;
-use Psr\Log\LoggerInterface;
+use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
 class ProductsAPI
 {
     private ShippedSuiteAPI $client;
     private Product $productModel;
-    private LoggerInterface $logger;
 
     public function __construct(
         ShippedSuiteAPI $client,
-        Product $productModel,
-        LoggerInterface $logger
+        Product $productModel
     ) {
         $this->client = $client;
         $this->productModel = $productModel;
-        $this->logger = $logger;
     }
 
     public function upsert(ProductInterface $product): ?string
@@ -41,9 +36,6 @@ class ProductsAPI
             Request::HTTP_METHOD_POST
         );
         $responseBody = $response->getBody();
-        $responseContent = $responseBody->getContents(); // here you will have the API response in JSON format
-//        $this->logger->debug($responseContent);
-
-        return $responseContent;
+        return $responseBody->getContents();
     }
 }

@@ -3,13 +3,13 @@
 namespace InvisibleCommerce\ShippedSuite\Model;
 
 use Exception;
-use InvisibleCommerce\ShippedSuite\Api\ShippedSuiteAPI;
+use InvisibleCommerce\ShippedSuite\Service\ShippedSuiteAPI;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Image;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Helper\Image;
 
 class WidgetConfigProvider implements ConfigProviderInterface
 {

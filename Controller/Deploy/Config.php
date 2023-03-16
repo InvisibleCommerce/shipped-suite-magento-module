@@ -129,6 +129,7 @@ class Config extends Action implements HttpGetActionInterface
         if ($consumerConfig->getOnlySpawnWhenMessageAvailable() === true
             || ($consumerConfig->getOnlySpawnWhenMessageAvailable() === null && $globalOnlySpawnWhenMessageAvailable)) {
             $this->logger->debug('8');
+//            $this->logger->debug($consumerConfig->getQueue()->getName());
             $this->logger->debug($this->checkIsAvailableMessages->execute(
                 $connectionName,
                 $consumerConfig->getQueue()

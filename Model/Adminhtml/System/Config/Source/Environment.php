@@ -2,7 +2,7 @@
 
 namespace InvisibleCommerce\ShippedSuite\Model\Adminhtml\System\Config\Source;
 
-use InvisibleCommerce\ShippedSuite\Api\ShippedSuiteAPI;
+use InvisibleCommerce\ShippedSuite\Service\ShippedSuiteAPI;
 use Magento\Framework\Data\OptionSourceInterface;
 
 class Environment implements OptionSourceInterface

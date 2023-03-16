@@ -2,7 +2,7 @@
 
 namespace InvisibleCommerce\ShippedSuite\Model;
 
-use InvisibleCommerce\ShippedSuite\Api\RefundsAPI;
+use InvisibleCommerce\ShippedSuite\Service\RefundsAPI;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;

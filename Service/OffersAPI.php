@@ -1,9 +1,8 @@
 <?php
+declare(strict_types=1);
 
-namespace InvisibleCommerce\ShippedSuite\Api;
+namespace InvisibleCommerce\ShippedSuite\Service;
 
-use GuzzleHttp\ClientFactory;
-use GuzzleHttp\Psr7\ResponseFactory;
 use Magento\Framework\Webapi\Rest\Request;
 
 class OffersAPI
@@ -24,9 +23,6 @@ class OffersAPI
             Request::HTTP_METHOD_POST
         );
         $responseBody = $response->getBody();
-        $responseContent = $responseBody->getContents(); // here you will have the API response in JSON format
-//        $this->logger->debug($responseContent);
-
-        return $responseContent;
+        return $responseBody->getContents();
     }
 }

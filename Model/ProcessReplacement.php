@@ -2,7 +2,7 @@
 
 namespace InvisibleCommerce\ShippedSuite\Model;
 
-use InvisibleCommerce\ShippedSuite\Api\ReplacementsAPI;
+use InvisibleCommerce\ShippedSuite\Service\ReplacementsAPI;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductRepository;

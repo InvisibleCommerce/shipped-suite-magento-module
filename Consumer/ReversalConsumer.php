@@ -2,12 +2,12 @@
 
 namespace InvisibleCommerce\ShippedSuite\Consumer;
 
-use InvisibleCommerce\ShippedSuite\Api\ReversalsAPI;
 use InvisibleCommerce\ShippedSuite\Observer\CreditMemoObserver;
+use InvisibleCommerce\ShippedSuite\Service\ReversalsAPI;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\MessageQueue\Publisher;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ReversalConsumer extends AbstractConsumer
 {

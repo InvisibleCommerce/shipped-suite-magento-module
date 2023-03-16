@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace InvisibleCommerce\ShippedSuite\Api;
+namespace InvisibleCommerce\ShippedSuite\Service;
 
 use Exception;
 use GuzzleHttp\ClientFactory;

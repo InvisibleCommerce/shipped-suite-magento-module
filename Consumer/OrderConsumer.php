@@ -2,18 +2,18 @@
 
 namespace InvisibleCommerce\ShippedSuite\Consumer;
 
-use InvisibleCommerce\ShippedSuite\Api\OrdersAPI;
 use InvisibleCommerce\ShippedSuite\Observer\CreditMemoObserver;
 use InvisibleCommerce\ShippedSuite\Observer\OrderObserver;
 use InvisibleCommerce\ShippedSuite\Observer\ProductObserver;
 use InvisibleCommerce\ShippedSuite\Observer\ShipmentObserver;
+use InvisibleCommerce\ShippedSuite\Service\OrdersAPI;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\MessageQueue\Publisher;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\OrderRepositoryFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class OrderConsumer extends AbstractConsumer
 {
@@ -50,7 +50,7 @@ class OrderConsumer extends AbstractConsumer
         }
 
         $orderRepository = $this->orderRepository->create();
-        $order = $orderRepository->get(0);
+        $order = $orderRepository->get($orderId);
 
         // update order
         $this->ordersAPI->upsert($order);

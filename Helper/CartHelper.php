@@ -2,12 +2,12 @@
 
 namespace InvisibleCommerce\ShippedSuite\Helper;
 
-use InvisibleCommerce\ShippedSuite\Api\OffersAPI;
 use InvisibleCommerce\ShippedSuite\Model\Product;
+use InvisibleCommerce\ShippedSuite\Service\OffersAPI;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class CartHelper
 {

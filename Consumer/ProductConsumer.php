@@ -2,8 +2,8 @@
 
 namespace InvisibleCommerce\ShippedSuite\Consumer;
 
-use InvisibleCommerce\ShippedSuite\Api\ProductsAPI;
 use InvisibleCommerce\ShippedSuite\Observer\ProductObserver;
+use InvisibleCommerce\ShippedSuite\Service\ProductsAPI;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\MessageQueue\Publisher;
