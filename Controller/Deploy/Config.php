@@ -59,7 +59,7 @@ class Config extends Action implements HttpGetActionInterface
         $consumers = [];
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $consumers[] = [
-                'canBeRun' => $this->consumerRunner->canBeRun($consumer, $allowedConsumers),
+                'canBeRun' => $this->callPrivateMethod($this->consumerRunner, 'canBeRun', $consumer, $allowedConsumers),
                 'name' => $consumer->getName(),
                 'locked' => $this->lockManager->isLocked(md5($consumer->getName()))
             ];
@@ -73,5 +73,15 @@ class Config extends Action implements HttpGetActionInterface
         ]);
 
         return $resultJson;
+    }
+
+    public function callPrivateMethod($object, $methodName)
+    {
+        $reflectionClass = new \ReflectionClass($object);
+        $reflectionMethod = $reflectionClass->getMethod($methodName);
+        $reflectionMethod->setAccessible(true);
+
+        $params = array_slice(func_get_args(), 2); //get all the parameters after $methodName
+        return $reflectionMethod->invokeArgs($object, $params);
     }
 }
