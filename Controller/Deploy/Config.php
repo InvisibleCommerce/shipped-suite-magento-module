@@ -85,6 +85,6 @@ class Config extends Action implements HttpGetActionInterface
         $this->logger->debug(json_encode(array_slice(func_get_args(), 2)));
         $params = array_slice(func_get_args(), 2); //get all the parameters after $methodName
         $this->logger->debug(json_encode($params));
-        return $reflectionMethod->invokeArgs($object, $params);
+        return $reflectionMethod->invokeArgs($object, [$consumer, $allowedConsumers]);
     }
 }
