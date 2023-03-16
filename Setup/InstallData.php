@@ -1,10 +1,13 @@
 <?php
+declare(strict_types=1);
+
 namespace InvisibleCommerce\ShippedSuite\Setup;
 
 use InvisibleCommerce\ShippedSuite\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -54,7 +57,7 @@ class InstallData implements InstallDataInterface
         $product->setSku($productInfo['sku']);
         $product->setName($productInfo['name']);
         $product->setTypeId(Type::TYPE_VIRTUAL);
-        $product->setVisibility(4);
+        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
         $product->setPrice(0);
         $product->setAttributeSetId($product->getDefaultAttributeSetId());
         $product->setStatus(Status::STATUS_ENABLED);

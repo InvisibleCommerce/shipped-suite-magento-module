@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace InvisibleCommerce\ShippedSuite\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
