@@ -13,6 +13,7 @@ use Magento\Framework\MessageQueue\Publisher;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface;
+use Magento\MessageQueue\Model\ConsumerRunner;
 
 class Config extends Action implements HttpGetActionInterface
 {
@@ -21,6 +22,7 @@ class Config extends Action implements HttpGetActionInterface
     private Publisher $publisher;
     private DeploymentConfig $deploymentConfig;
     private ConfigInterface $consumerConfig;
+    private ConsumerRunner $consumerRunner;
 
     const TOPIC_NAME = 'shippedsuite.webhook.process';
 
@@ -30,13 +32,15 @@ class Config extends Action implements HttpGetActionInterface
         LoggerInterface $logger,
         Publisher $publisher,
         DeploymentConfig $deploymentConfig,
-        ConfigInterface $consumerConfig
+        ConfigInterface $consumerConfig,
+        ConsumerRunner $consumerRunner
     ) {
         $this->logger = $logger;
         $this->jsonFactory = $jsonFactory;
         $this->publisher = $publisher;
         $this->deploymentConfig = $deploymentConfig;
         $this->consumerConfig = $consumerConfig;
+        $this->consumerRunner = $consumerRunner;
         parent::__construct($context);
     }
     public function execute()
@@ -50,14 +54,17 @@ class Config extends Action implements HttpGetActionInterface
         $resultJson = $resultJson->setHttpResponseCode(200);
         $consumers = [];
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
-            $consumers[] = $consumer->getName();
+            $consumers[] = [
+                'canBeRun' => $this->consumerRunner->canBeRun($consumer, $allowedConsumers),
+                'name' => $consumer->getName()
+            ];
         }
         $resultJson = $resultJson->setData([
             '$runByCron' => $runByCron,
             '$multipleProcesses' => $multipleProcesses,
             '$maxMessages' => $maxMessages,
             '$allowedConsumers' => $allowedConsumers,
-            'consumer' => $consumers
+            '$consumers' => $consumers
         ]);
 
         return $resultJson;
