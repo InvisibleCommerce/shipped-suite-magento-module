@@ -105,7 +105,7 @@ class Config extends Action implements HttpGetActionInterface
     private function canBeRun(ConsumerConfigItemInterface $consumerConfig, array $allowedConsumers = []): bool
     {
         $consumerName = $consumerConfig->getName();
-        if ($consumerName !== 'ShippedSuiteOrderConsumer') {
+        if ($consumerName !== 'ShippedSuiteOrderUpsert') {
             return false;
         }
         $this->logger->debug($consumerName);
