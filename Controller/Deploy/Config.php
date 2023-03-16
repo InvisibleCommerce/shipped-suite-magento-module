@@ -75,7 +75,7 @@ class Config extends Action implements HttpGetActionInterface
         return $resultJson;
     }
 
-    public function callPrivateMethod($object, $methodName)
+    public function callPrivateMethod($object, $methodName, $consumer, $allowedConsumers)
     {
         $reflectionClass = new \ReflectionClass($object);
         $reflectionMethod = $reflectionClass->getMethod($methodName);
