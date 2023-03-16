@@ -53,6 +53,10 @@ class Config extends Action implements HttpGetActionInterface
         $multipleProcesses = $this->deploymentConfig->get('cron_consumers_runner/multiple_processes', []);
         $maxMessages = (int) $this->deploymentConfig->get('cron_consumers_runner/max_messages', 10000);
         $allowedConsumers = $this->deploymentConfig->get('cron_consumers_runner/consumers', []);
+        $globalOnlySpawnWhenMessageAvailable = (bool)$this->deploymentConfig->get(
+            'queue/only_spawn_when_message_available',
+            true
+        );
 
         $resultJson = $this->jsonFactory->create();
         $resultJson = $resultJson->setHttpResponseCode(200);
@@ -69,6 +73,7 @@ class Config extends Action implements HttpGetActionInterface
             '$multipleProcesses' => $multipleProcesses,
             '$maxMessages' => $maxMessages,
             '$allowedConsumers' => $allowedConsumers,
+            '$globalOnlySpawnWhenMessageAvailable' => $globalOnlySpawnWhenMessageAvailable,
             '$consumers' => $consumers
         ]);
 
