@@ -9,12 +9,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\MessageQueue\Publisher;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface;
 use Magento\MessageQueue\Model\Cron\ConsumersRunner;
 use Magento\Framework\Lock\LockManagerInterface;
+use Magento\MessageQueue\Model\CheckIsAvailableMessagesInQueue;
 
 class Config extends Action implements HttpGetActionInterface
 {
@@ -25,6 +27,8 @@ class Config extends Action implements HttpGetActionInterface
     private ConfigInterface $consumerConfig;
     private ConsumersRunner $consumerRunner;
     private LockManagerInterface $lockManager;
+    private $checkIsAvailableMessages;
+    private $mqConnectionTypeResolver;
 
     const TOPIC_NAME = 'shippedsuite.webhook.process';
 
@@ -36,7 +40,9 @@ class Config extends Action implements HttpGetActionInterface
         DeploymentConfig $deploymentConfig,
         ConfigInterface $consumerConfig,
         ConsumersRunner $consumerRunner,
-        LockManagerInterface $lockManager
+        LockManagerInterface $lockManager,
+        $checkIsAvailableMessages,
+        $mqConnectionTypeResolver
     ) {
         $this->logger = $logger;
         $this->jsonFactory = $jsonFactory;
@@ -45,6 +51,8 @@ class Config extends Action implements HttpGetActionInterface
         $this->consumerConfig = $consumerConfig;
         $this->consumerRunner = $consumerRunner;
         $this->lockManager = $lockManager;
+        $this->checkIsAvailableMessages = $checkIsAvailableMessages;
+        $this->mqConnectionTypeResolver = $mqConnectionTypeResolver;
         parent::__construct($context);
     }
     public function execute()
@@ -63,7 +71,7 @@ class Config extends Action implements HttpGetActionInterface
         $consumers = [];
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $consumers[] = [
-                'canBeRun' => $this->callPrivateMethod($this->consumerRunner, 'canBeRun', $consumer, $allowedConsumers),
+                'canBeRun' => $this->canBeRun($consumer, $allowedConsumers),
                 'name' => $consumer->getName(),
                 'locked' => $this->lockManager->isLocked(md5($consumer->getName()))
             ];
@@ -91,5 +99,30 @@ class Config extends Action implements HttpGetActionInterface
         $params = array_slice(func_get_args(), 2); //get all the parameters after $methodName
         $this->logger->debug(json_encode($params));
         return $reflectionMethod->invokeArgs($object, [$consumer, $allowedConsumers]);
+    }
+
+    private function canBeRun(ConsumerConfigItemInterface $consumerConfig, array $allowedConsumers = []): bool
+    {
+        $consumerName = $consumerConfig->getName();
+        if (!empty($allowedConsumers) && !in_array($consumerName, $allowedConsumers)) {
+            return false;
+        }
+
+        $connectionName = $consumerConfig->getConnection();
+        $this->mqConnectionTypeResolver->getConnectionType($connectionName);
+
+        $globalOnlySpawnWhenMessageAvailable = (bool)$this->deploymentConfig->get(
+            'queue/only_spawn_when_message_available',
+            true
+        );
+        if ($consumerConfig->getOnlySpawnWhenMessageAvailable() === true
+            || ($consumerConfig->getOnlySpawnWhenMessageAvailable() === null && $globalOnlySpawnWhenMessageAvailable)) {
+            return $this->checkIsAvailableMessages->execute(
+                $connectionName,
+                $consumerConfig->getQueue()
+            );
+        }
+
+        return true;
     }
 }
