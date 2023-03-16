@@ -35,7 +35,7 @@ class Config extends Action implements HttpGetActionInterface
         Publisher $publisher,
         DeploymentConfig $deploymentConfig,
         ConfigInterface $consumerConfig,
-        ConsumerRunner $consumerRunner,
+        ConsumersRunner $consumerRunner,
         LockManagerInterface $lockManager
     ) {
         $this->logger = $logger;
@@ -60,7 +60,8 @@ class Config extends Action implements HttpGetActionInterface
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             $consumers[] = [
                 'canBeRun' => $this->consumerRunner->canBeRun($consumer, $allowedConsumers),
-                'name' => $consumer->getName()
+                'name' => $consumer->getName(),
+                'locked' => $this->lockManager->isLocked(md5($consumer->getName()))
             ];
         }
         $resultJson = $resultJson->setData([
