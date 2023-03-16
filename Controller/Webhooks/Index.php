@@ -1,9 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Controller\Webhooks;
 
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
@@ -13,35 +12,33 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\MessageQueue\Publisher;
 use Psr\Log\LoggerInterface;
 
-class Index extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
+class Index implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     private JsonFactory $jsonFactory;
-    private LoggerInterface $logger;
     private Publisher $publisher;
     private ScopeConfigInterface $scopeConfig;
+    private RequestInterface $request;
 
     const TOPIC_NAME = 'shippedsuite.webhook.process';
 
     public function __construct(
-        Context $context,
         JsonFactory $jsonFactory,
-        LoggerInterface $logger,
         Publisher $publisher,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        RequestInterface $request
     ) {
-        $this->logger = $logger;
         $this->jsonFactory = $jsonFactory;
         $this->publisher = $publisher;
         $this->scopeConfig = $scopeConfig;
-        parent::__construct($context);
+        $this->request = $request;
     }
     public function execute()
     {
         $request = $this->getRequest();
 
         $resultJson = $this->jsonFactory->create();
-        if ($this->authenticated($request)) {
-            $this->publisher->publish(self::TOPIC_NAME, $request->getContent());
+        if ($this->authenticated()) {
+            $this->publisher->publish(self::TOPIC_NAME, $this->request->getContent());
             $resultJson = $resultJson->setData(['status' => 'ok']);
         } else {
             $resultJson = $resultJson->setHttpResponseCode(401);
@@ -51,12 +48,12 @@ class Index extends Action implements HttpPostActionInterface, CsrfAwareActionIn
         return $resultJson;
     }
 
-    private function authenticated(RequestInterface $request): bool
+    private function authenticated(): bool
     {
-        $hmac = $request->getHeader('X_SHIPPED_SUITE_HMAC_SHA256');
+        $hmac = $this->request->getHeader('X_SHIPPED_SUITE_HMAC_SHA256');
 
         $secret = $this->scopeConfig->getValue('shipped_suite_api/api/webhook_secret');
-        $calculatedHmac = $this->calculatedHmac($request, $secret);
+        $calculatedHmac = $this->calculatedHmac($secret);
         if (hash_equals($calculatedHmac, $hmac)) {
             return true;
         }
@@ -64,9 +61,9 @@ class Index extends Action implements HttpPostActionInterface, CsrfAwareActionIn
         return false;
     }
 
-    private function calculatedHmac(RequestInterface $request, string $secret): string
+    private function calculatedHmac(string $secret): string
     {
-        $data = $request->getContent();
+        $data = $this->request->getContent();
         return base64_encode(hash_hmac('sha256', $data, $secret, true));
     }
 
