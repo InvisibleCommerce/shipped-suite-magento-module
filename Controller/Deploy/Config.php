@@ -132,7 +132,7 @@ class Config extends Action implements HttpGetActionInterface
             $this->logger->debug($this->checkIsAvailableMessages->execute(
                 $connectionName,
                 $consumerConfig->getQueue()
-            ));
+            ) ? 'true' : 'false');
             return $this->checkIsAvailableMessages->execute(
                 $connectionName,
                 $consumerConfig->getQueue()
