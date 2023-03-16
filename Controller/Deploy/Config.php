@@ -53,7 +53,7 @@ class Config extends Action implements HttpGetActionInterface
             '$multipleProcesses' => $multipleProcesses,
             '$maxMessages' => $maxMessages,
             '$allowedConsumers' => $allowedConsumers,
-            'consumer' => array_map([$this, 'getConsumerName'], $this->consumerConfig->getConsumers())
+            'consumer' => array_map([$this, 'getConsumerName'], $this->consumerConfig->getConsumers()->getAllItems())
         ]);
 
         return $resultJson;
