@@ -104,8 +104,11 @@ class Config extends Action implements HttpGetActionInterface
 
     private function canBeRun(ConsumerConfigItemInterface $consumerConfig, array $allowedConsumers = []): bool
     {
-        $this->logger->debug('1');
         $consumerName = $consumerConfig->getName();
+        if ($consumerName !== 'ShippedSuiteOrderConsumer') {
+            return;
+        }
+        $this->logger->debug($consumerName);
         $this->logger->debug('2');
         if (!empty($allowedConsumers) && !in_array($consumerName, $allowedConsumers)) {
             $this->logger->debug('3');
