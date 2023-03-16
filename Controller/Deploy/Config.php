@@ -17,6 +17,7 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface;
 use Magento\MessageQueue\Model\Cron\ConsumersRunner;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\MessageQueue\Model\CheckIsAvailableMessagesInQueue;
+use Magento\Framework\MessageQueue\ConnectionTypeResolver;
 
 class Config extends Action implements HttpGetActionInterface
 {
@@ -27,8 +28,8 @@ class Config extends Action implements HttpGetActionInterface
     private ConfigInterface $consumerConfig;
     private ConsumersRunner $consumerRunner;
     private LockManagerInterface $lockManager;
-    private $checkIsAvailableMessages;
-    private $mqConnectionTypeResolver;
+    private CheckIsAvailableMessagesInQueue $checkIsAvailableMessages;
+    private ConnectionTypeResolver $mqConnectionTypeResolver;
 
     const TOPIC_NAME = 'shippedsuite.webhook.process';
 
@@ -41,8 +42,8 @@ class Config extends Action implements HttpGetActionInterface
         ConfigInterface $consumerConfig,
         ConsumersRunner $consumerRunner,
         LockManagerInterface $lockManager,
-        $checkIsAvailableMessages,
-        $mqConnectionTypeResolver
+        CheckIsAvailableMessagesInQueue $checkIsAvailableMessages,
+        ConnectionTypeResolver $mqConnectionTypeResolver
     ) {
         $this->logger = $logger;
         $this->jsonFactory = $jsonFactory;
