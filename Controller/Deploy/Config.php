@@ -13,7 +13,8 @@ use Magento\Framework\MessageQueue\Publisher;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface;
-use Magento\MessageQueue\Model\ConsumerRunner;
+use Magento\MessageQueue\Model\ConsumersRunner;
+use Magento\Framework\Lock\LockManagerInterface;
 
 class Config extends Action implements HttpGetActionInterface
 {
@@ -22,7 +23,8 @@ class Config extends Action implements HttpGetActionInterface
     private Publisher $publisher;
     private DeploymentConfig $deploymentConfig;
     private ConfigInterface $consumerConfig;
-    private ConsumerRunner $consumerRunner;
+    private ConsumersRunner $consumerRunner;
+    private LockManagerInterface $lockManager;
 
     const TOPIC_NAME = 'shippedsuite.webhook.process';
 
@@ -33,7 +35,8 @@ class Config extends Action implements HttpGetActionInterface
         Publisher $publisher,
         DeploymentConfig $deploymentConfig,
         ConfigInterface $consumerConfig,
-        ConsumerRunner $consumerRunner
+        ConsumerRunner $consumerRunner,
+        LockManagerInterface $lockManager
     ) {
         $this->logger = $logger;
         $this->jsonFactory = $jsonFactory;
@@ -41,6 +44,7 @@ class Config extends Action implements HttpGetActionInterface
         $this->deploymentConfig = $deploymentConfig;
         $this->consumerConfig = $consumerConfig;
         $this->consumerRunner = $consumerRunner;
+        $this->lockManager = $lockManager;
         parent::__construct($context);
     }
     public function execute()
