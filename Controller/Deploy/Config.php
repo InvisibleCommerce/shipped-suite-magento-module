@@ -106,7 +106,7 @@ class Config extends Action implements HttpGetActionInterface
     {
         $consumerName = $consumerConfig->getName();
         if ($consumerName !== 'ShippedSuiteOrderConsumer') {
-            return;
+            return false;
         }
         $this->logger->debug($consumerName);
         $this->logger->debug('2');
