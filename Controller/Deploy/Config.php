@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\Publisher;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface;
-use Magento\MessageQueue\Model\ConsumersRunner;
+use Magento\MessageQueue\Model\Cron\ConsumersRunner;
 use Magento\Framework\Lock\LockManagerInterface;
 
 class Config extends Action implements HttpGetActionInterface
