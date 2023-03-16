@@ -1,12 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Helper;
 
 use InvisibleCommerce\ShippedSuite\Model\Product;
 use InvisibleCommerce\ShippedSuite\Service\OffersAPI;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\QuoteRepository;
 use Psr\Log\LoggerInterface;
 
 class CartHelper
@@ -15,17 +18,23 @@ class CartHelper
     private OffersAPI $offersAPI;
     private ProductRepositoryInterface $productRepository;
     private ScopeConfigInterface $scopeConfig;
+    private QuoteRepository $quoteRepository;
+    private SerializerInterface $serializer;
 
     public function __construct(
         LoggerInterface $logger,
         OffersAPI $offersAPI,
         ProductRepositoryInterface $productRepository,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        QuoteRepository $quoteRepository,
+        SerializerInterface $serializer
     ) {
         $this->logger = $logger;
         $this->offersAPI = $offersAPI;
         $this->productRepository = $productRepository;
         $this->scopeConfig = $scopeConfig;
+        $this->quoteRepository = $quoteRepository;
+        $this->serializer = $serializer;
     }
 
     public function removeManagedProducts(CartInterface &$quote): CartInterface
@@ -52,7 +61,7 @@ class CartHelper
         foreach ($offers as $sku => $price) {
             $this->addOffer($quote, $sku, $price);
         }
-        $quote->save();
+        $this->quoteRepository->save($quote);
 
         return $quote;
     }
@@ -92,9 +101,9 @@ class CartHelper
             $subtotal += $item->getPrice() * $item->getQty();
         }
 
-        $response = $this->offersAPI->getOffer($subtotal);
+        $response = $this->offersAPI->getOffer((string)$subtotal);
         $this->logger->debug($response);
-        $offersJson = json_decode($response, true);
+        $offersJson = $this->serializer->unserialize($response);
 
         $offers = [];
         if (!empty($offersJson['shield_fee'])) {
