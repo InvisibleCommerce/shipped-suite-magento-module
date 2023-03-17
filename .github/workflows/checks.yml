@@ -1,0 +1,74 @@
+name: 'checks'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: ubuntu
+    services:
+      mysql:
+        image: docker://mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: magento
+          MYSQL_DATABASE: magento
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      elasticsearch:
+        image: docker://elasticsearch:7.1.0
+        ports:
+          - 9200:9200
+        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      ### Download the third party code in custom dir###
+      - uses: actions/checkout@v3
+        with:
+          path: InvisibleCommerce_ShippedSuite
+
+      - name: 'install fresh magento repo'
+        uses: MAD-I-T/magento-actions@v3.20
+        env:
+          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
+        with:
+          process: 'install-magento'
+          magento_version: 2.4.6
+          no_push: 1   ## add this arg to not push to the repo ideal for quick test on specific version
+
+#      - name: 'launch magento2 unit test'
+#        if: always()
+#        uses: MAD-I-T/magento-actions@v3.20
+#        env:
+#          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
+#        with:
+#          process: 'unit-test'
+#          unit_test_config: 'dev/tests/unit/phpunit.xml.dist'
+#          unit_test_subset_path: '../InvisibleCommerce_ShippedSuite/'
+#          elasticsearch: 1
+
+      - name: 'phpstan'
+        if: always()
+        uses: MAD-I-T/magento-actions@v3.20
+        with:
+          process: 'phpstan'
+          exec_path: '../InvisibleCommerce_ShippedSuite/'
+
+#      - name: 'mess detector'
+#        if: always()
+#        uses: MAD-I-T/magento-actions@v3.20
+#        with:
+#          process: 'mess-detector'
+#          md_src_path: '../InvisibleCommerce_ShippedSuite/'
+
+      - name: 'Magento coding standard checking'
+        if: always()
+        uses: MAD-I-T/magento-actions@v3.20
+        with:
+          process: 'phpcs-test'
+          extension: 'InvisibleCommerce_ShippedSuite'
+          severity: 10
+          standard: 'Magento2'

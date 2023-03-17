@@ -57,6 +57,8 @@ class Install implements DataPatchInterface
         );
 
         $this->moduleDataSetup->endSetup();
+
+        return $this;
     }
 
     public function revert()
