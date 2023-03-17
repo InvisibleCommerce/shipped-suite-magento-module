@@ -124,7 +124,7 @@ class Install implements DataPatchInterface
 
     public static function getVersion()
     {
-        return '1.0.1';
+        return '3.0.0';
     }
 
     public static function getDependencies()
