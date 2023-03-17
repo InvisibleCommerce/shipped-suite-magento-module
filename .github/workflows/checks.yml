@@ -1,4 +1,4 @@
-name: m2-actions-sips2-test
+name: 'checks'
 
 on:
   push:
@@ -7,10 +7,9 @@ on:
     branches: [ main ]
 
 jobs:
-  magento2-build:
+  test:
     runs-on: ubuntu-latest
     container: ubuntu
-    name: 'm2 tests & build'
     services:
       mysql:
         image: docker://mysql:8.0
