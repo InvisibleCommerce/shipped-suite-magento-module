@@ -32,7 +32,7 @@ jobs:
           path: InvisibleCommerce_ShippedSuite
 
       - name: 'install fresh magento repo'
-        uses: InvisibleCommerce/magento-actions@v1
+        uses: InvisibleCommerce/magento-actions@master
         env:
           COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
         with:
@@ -53,7 +53,7 @@ jobs:
 
       - name: 'phpstan'
         if: always()
-        uses: InvisibleCommerce/magento-actions@v1
+        uses: InvisibleCommerce/magento-actions@master
         with:
           process: 'phpstan'
           exec_path: '../InvisibleCommerce_ShippedSuite/'
