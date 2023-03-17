@@ -103,7 +103,7 @@ class ProcessReplacement
             $this->orderRepository->save($replacementOrder);
             $this->replacementsAPI->upsert($payload['id'], $replacementOrder);
         } else {
-            echo 'failed to create order';
+            $this->logger->error('Failed to create order for ReplacementRequest ID ' . $payload['id']);
         }
     }
 
