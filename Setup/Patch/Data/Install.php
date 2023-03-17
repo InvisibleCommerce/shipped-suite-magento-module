@@ -95,6 +95,37 @@ class Install implements DataPatchInterface
         }
     }
 
+    private function createProduct(array $productInfo): void
+    {
+        $product = $this->productFactory->create();
+        $product->setSku($productInfo['sku']);
+        $product->setName($productInfo['name']);
+        $product->setTypeId(Type::TYPE_VIRTUAL);
+        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
+        $product->setPrice(0);
+        $product->setAttributeSetId($product->getDefaultAttributeSetId());
+        $product->setStatus(Status::STATUS_ENABLED);
+        $product->setWeight(0);
+
+        $mediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
+        $product->addImageToMediaGallery(
+            $mediaPath . 'shipped_suite/' . $productInfo['image'],
+            ['image', 'small_image', 'thumbnail'],
+            false,
+            false
+        );
+
+        $product->setStockData([
+            'use_config_manage_stock' => 0,
+            'is_in_stock' => 1,
+            'qty' => 0,
+            'manage_stock' => 0,
+            'use_config_notify_stock_qty' => 0
+        ]);
+
+        $this->productRepository->save($product);
+    }
+
     private function deleteProducts()
     {
         foreach (Product::MANAGE_PRODUCTS as $productInfo) {
