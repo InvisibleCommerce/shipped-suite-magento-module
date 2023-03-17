@@ -22,6 +22,7 @@ use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 
 class Install implements SchemaPatchInterface
 {
+    const FILES = ['shield.png', 'green.png'];
     private State $state;
     private ProductFactory $productFactory;
     private ProductRepositoryInterface $productRepository;
@@ -66,7 +67,7 @@ class Install implements SchemaPatchInterface
         $tempFilePath = $this->filesystem->getDirectoryRead($type)->getAbsolutePath() . 'shipped_suite/';
 
         $modulePath = $this->reader->getModuleDir('', 'InvisibleCommerce_ShippedSuite');
-        foreach (['shield.png', 'green.png'] as $file) {
+        foreach (self::FILES as $file) {
             $mediaFile = $modulePath . '/Assets/' . $file;
             if (!file_exists($tempFilePath)) {
                 mkdir($tempFilePath, 0777, true);
@@ -104,7 +105,7 @@ class Install implements SchemaPatchInterface
         $type = DirectoryList::MEDIA;
         $tempFilePath = $this->filesystem->getDirectoryRead($type)->getAbsolutePath() . 'shipped_suite/';
 
-        foreach (['shield.png', 'green.png'] as $file) {
+        foreach (self::FILES as $file) {
             $filePath = $tempFilePath . $file;
             if (file_exists($filePath)) {
                 unlink($tempFilePath);
