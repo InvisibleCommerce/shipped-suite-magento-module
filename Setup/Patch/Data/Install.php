@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace InvisibleCommerce\ShippedSuite\Setup\Patch\Data;
 
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use InvisibleCommerce\ShippedSuite\Model\Product;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -16,13 +17,13 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 
 class Install implements SchemaPatchInterface
 {
     const FILES = ['shield.png', 'green.png'];
+    private ModuleDataSetupInterface $moduleDataSetup;
     private State $state;
     private ProductFactory $productFactory;
     private ProductRepositoryInterface $productRepository;
@@ -30,12 +31,14 @@ class Install implements SchemaPatchInterface
     private Filesystem $filesystem;
 
     public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup,
         State $state,
         ProductFactory $productFactory,
         ProductRepositoryInterface $productRepository,
         Reader $reader,
         Filesystem $filesystem
     ) {
+        $this->moduleDataSetup = $moduleDataSetup;
         $this->state = $state;
         $this->productFactory = $productFactory;
         $this->productRepository = $productRepository;
@@ -45,11 +48,15 @@ class Install implements SchemaPatchInterface
 
     public function apply()
     {
+        $this->moduleDataSetup->startSetup();
+
         $this->moveDirToMediaDir();
         $this->state->emulateAreaCode(
             Area::AREA_GLOBAL,
             [$this, "addProducts"],
         );
+
+        $this->moduleDataSetup->endSetup();
     }
 
     public function revert()
@@ -113,6 +120,11 @@ class Install implements SchemaPatchInterface
         }
 
         rmdir($tempFilePath);
+    }
+
+    public static function getVersion()
+    {
+        return '1.0.1';
     }
 
     public static function getDependencies()
