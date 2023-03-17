@@ -31,7 +31,7 @@ jobs:
           path: InvisibleCommerce_ShippedSuite
 
       - name: 'install fresh magento repo'
-        uses: InvisibleCommerce/magento-actions@master
+        uses: MAD-I-T/magento-actions@3.20
         env:
           COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
         with:
@@ -41,7 +41,7 @@ jobs:
 
 #      - name: 'launch magento2 unit test'
 #        if: always()
-#        uses: MAD-I-T/magento-actions@v3.19
+#        uses: MAD-I-T/magento-actions@v3.20
 #        env:
 #          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
 #        with:
@@ -52,21 +52,21 @@ jobs:
 
       - name: 'phpstan'
         if: always()
-        uses: InvisibleCommerce/magento-actions@master
+        uses: MAD-I-T/magento-actions@3.20
         with:
           process: 'phpstan'
           exec_path: '../InvisibleCommerce_ShippedSuite/'
 
 #      - name: 'mess detector'
 #        if: always()
-#        uses: MAD-I-T/magento-actions@v3.19
+#        uses: MAD-I-T/magento-actions@v3.20
 #        with:
 #          process: 'mess-detector'
 #          md_src_path: '../InvisibleCommerce_ShippedSuite/'
 #
 #      - name: 'Magento coding standard checking'
 #        if: always()
-#        uses: MAD-I-T/magento-actions@v3.19
+#        uses: MAD-I-T/magento-actions@v3.20
 #        with:
 #          process: 'phpcs-test'
 #          extension: 'InvisibleCommerce_ShippedSuite'
