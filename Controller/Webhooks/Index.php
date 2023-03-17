@@ -34,8 +34,6 @@ class Index implements HttpPostActionInterface, CsrfAwareActionInterface
     }
     public function execute()
     {
-        $request = $this->getRequest();
-
         $resultJson = $this->jsonFactory->create();
         if ($this->authenticated()) {
             $this->publisher->publish(self::TOPIC_NAME, $this->request->getContent());

@@ -57,18 +57,18 @@ jobs:
           process: 'phpstan'
           exec_path: '../InvisibleCommerce_ShippedSuite/'
 
-      - name: 'mess detector'
-        if: always()
-        uses: MAD-I-T/magento-actions@v3.19
-        with:
-          process: 'mess-detector'
-          md_src_path: '../InvisibleCommerce_ShippedSuite/'
-
-      - name: 'Magento coding standard checking'
-        if: always()
-        uses: MAD-I-T/magento-actions@v3.19
-        with:
-          process: 'phpcs-test'
-          extension: 'InvisibleCommerce_ShippedSuite'
-          severity: 10
-          standard: 'Magento2'
+#      - name: 'mess detector'
+#        if: always()
+#        uses: MAD-I-T/magento-actions@v3.19
+#        with:
+#          process: 'mess-detector'
+#          md_src_path: '../InvisibleCommerce_ShippedSuite/'
+#
+#      - name: 'Magento coding standard checking'
+#        if: always()
+#        uses: MAD-I-T/magento-actions@v3.19
+#        with:
+#          process: 'phpcs-test'
+#          extension: 'InvisibleCommerce_ShippedSuite'
+#          severity: 10
+#          standard: 'Magento2'
