@@ -18,9 +18,9 @@ use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
-use Magento\Framework\Setup\Patch\SchemaPatchInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
 
-class Install implements SchemaPatchInterface
+class Install implements DataPatchInterface
 {
     const FILES = ['shield.png', 'green.png'];
     private ModuleDataSetupInterface $moduleDataSetup;
