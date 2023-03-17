@@ -53,11 +53,11 @@ class Install implements SchemaPatchInterface
 
     public function revert()
     {
+        $this->deleteImages();
         $this->state->emulateAreaCode(
             Area::AREA_GLOBAL,
             [$this, "deleteProducts"],
         );
-        $this->deleteImages();
     }
 
     private function moveDirToMediaDir()
