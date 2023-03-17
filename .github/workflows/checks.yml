@@ -32,7 +32,7 @@ jobs:
           path: InvisibleCommerce_ShippedSuite
 
       - name: 'install fresh magento repo'
-        uses: MAD-I-T/magento-actions@master
+        uses: InvisibleCommerce/magento-actions@v1
         env:
           COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
         with:
