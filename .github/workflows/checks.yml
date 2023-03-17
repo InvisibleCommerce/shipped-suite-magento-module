@@ -63,12 +63,12 @@ jobs:
 #        with:
 #          process: 'mess-detector'
 #          md_src_path: '../InvisibleCommerce_ShippedSuite/'
-#
-#      - name: 'Magento coding standard checking'
-#        if: always()
-#        uses: MAD-I-T/magento-actions@v3.20
-#        with:
-#          process: 'phpcs-test'
-#          extension: 'InvisibleCommerce_ShippedSuite'
-#          severity: 10
-#          standard: 'Magento2'
+
+      - name: 'Magento coding standard checking'
+        if: always()
+        uses: MAD-I-T/magento-actions@v3.20
+        with:
+          process: 'phpcs-test'
+          extension: 'InvisibleCommerce_ShippedSuite'
+          severity: 10
+          standard: 'Magento2'
