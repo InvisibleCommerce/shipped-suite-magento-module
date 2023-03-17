@@ -52,6 +52,7 @@ jobs:
 #          elasticsearch: 1
 
       - name: 'phpstan'
+        if: always()
         uses: MAD-I-T/magento-actions@v3.19
         with:
           process: 'phpstan'
