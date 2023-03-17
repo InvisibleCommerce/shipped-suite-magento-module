@@ -53,7 +53,7 @@ jobs:
 
       - name: 'phpstan'
         if: always()
-        uses: InvisibleCommerce/magento-actions@phpstan-fix
+        uses: InvisibleCommerce/magento-actions@master
         with:
           process: 'phpstan'
           exec_path: '../InvisibleCommerce_ShippedSuite/'
