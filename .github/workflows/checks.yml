@@ -39,16 +39,16 @@ jobs:
           magento_version: 2.4.6
           no_push: 1   ## add this arg to not push to the repo ideal for quick test on specific version
 
-#      - name: 'launch magento2 unit test'
-#        if: always()
-#        uses: MAD-I-T/magento-actions@v3.20
-#        env:
-#          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
-#        with:
-#          process: 'unit-test'
-#          unit_test_config: 'dev/tests/unit/phpunit.xml.dist'
-#          unit_test_subset_path: '../InvisibleCommerce_ShippedSuite/'
-#          elasticsearch: 1
+      - name: 'launch magento2 unit test'
+        if: always()
+        uses: MAD-I-T/magento-actions@v3.20
+        env:
+          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
+        with:
+          process: 'unit-test'
+          unit_test_config: 'dev/tests/unit/phpunit.xml.dist'
+          unit_test_subset_path: '../InvisibleCommerce_ShippedSuite/'
+          elasticsearch: 1
 
       - name: 'phpstan'
         if: always()
