@@ -1,6 +1,10 @@
 <?php
+declare(strict_types=1);
+
+namespace InvisibleCommerce\ShippedSuite\Test;
 
 use \PHPUnit\Framework\TestCase;
+
 class SanityTest extends TestCase
 {
     public function testTestEnvironmentIsSetupCorrectly()
@@ -9,4 +13,3 @@ class SanityTest extends TestCase
         $this->assertTrue($condition);
     }
 }
-?>
