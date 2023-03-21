@@ -19,11 +19,11 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-      elasticsearch:
-        image: docker://elasticsearch:7.1.0
+      opensearch:
+        image: ghcr.io/mad-i-t/magento-opensearch:2.5.0
         ports:
           - 9200:9200
-        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+        options: -e="discovery.type=single-node" -e "plugins.security.disabled=true" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
     steps:
       ### Download the third party code in custom dir###
       - uses: actions/checkout@v3
@@ -39,16 +39,15 @@ jobs:
           magento_version: 2.4.6
           no_push: 1   ## add this arg to not push to the repo ideal for quick test on specific version
 
-#      - name: 'launch magento2 unit test'
-#        if: always()
-#        uses: MAD-I-T/magento-actions@v3.20
-#        env:
-#          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
-#        with:
-#          process: 'unit-test'
-#          unit_test_config: 'dev/tests/unit/phpunit.xml.dist'
-#          unit_test_subset_path: '../InvisibleCommerce_ShippedSuite/'
-#          elasticsearch: 1
+      - name: 'launch magento2 unit test'
+        if: always()
+        uses: MAD-I-T/magento-actions@v3.20
+        env:
+          COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
+        with:
+          process: 'unit-test'
+          unit_test_config: 'dev/tests/unit/phpunit.xml.dist'
+          unit_test_subset_path: '../InvisibleCommerce_ShippedSuite/'
 
       - name: 'phpstan'
         if: always()
