@@ -48,7 +48,6 @@ jobs:
           process: 'unit-test'
           unit_test_config: 'dev/tests/unit/phpunit.xml.dist'
           unit_test_subset_path: '../InvisibleCommerce_ShippedSuite/'
-          elasticsearch: 1
 
       - name: 'phpstan'
         if: always()
