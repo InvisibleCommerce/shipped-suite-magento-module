@@ -70,10 +70,15 @@ class OrderItem
 
     private function orderItemProductType(OrderItemInterface $item): string
     {
-        return match ($item->getSku()) {
-            Product::SHIPPED_GREEN_SKU => 'carbon',
-            Product::SHIPPED_SHIELD_SKU => 'insurance',
-            default => 'regular',
-        };
+        switch ($item->getSku()) {
+           case Product::SHIPPED_GREEN_SKU:
+               return 'carbon';
+               break;
+           case Product::SHIPPED_SHIELD_SKU:
+               return 'insurance';
+               break;
+           default:
+               return 'regular';
+       }
     }
 }

@@ -75,11 +75,16 @@ class WidgetConfigProvider implements ConfigProviderInterface
     {
         $environment = $this->scopeConfig->getValue('shipped_suite_api/api/environment');
 
-        return match ($environment) {
-            ShippedSuiteAPI::ENVIRONMENT_STAGING => self::STAGING_URL,
-            ShippedSuiteAPI::ENVIRONMENT_PRODUCTION => self::PRODUCTION_URL,
-            default => throw new Exception('Unknown environment'),
-        };
+        switch ($environment) {
+           case ShippedSuiteAPI::ENVIRONMENT_STAGING:
+               return self::STAGING_URL;
+               break;
+           case ShippedSuiteAPI::ENVIRONMENT_PRODUCTION:
+               return self::PRODUCTION_URL;
+               break;
+           default:
+               throw new Exception('Unknown environment');
+       }
     }
 
     private function getImageData(ProductInterface $product): array

@@ -74,11 +74,16 @@ class ShippedSuiteAPI
         $environment = $this->scopeConfig->getValue('shipped_suite_api/api/environment');
         $this->logger->debug('environment: ' . $environment);
 
-        return match ($environment) {
-            self::ENVIRONMENT_STAGING => self::STAGING_URI,
-            self::ENVIRONMENT_PRODUCTION => self::PRODUCTION_URI,
-            default => throw new Exception('Unknown environment'),
-        };
+        switch ($environment) {
+           case self::ENVIRONMENT_STAGING:
+               return self::STAGING_URI;
+               break;
+           case self::ENVIRONMENT_PRODUCTION:
+               return self::PRODUCTION_URI;
+               break;
+           default:
+               throw new Exception('Unknown environment');
+       }
     }
 
     private function secretKey(): string
