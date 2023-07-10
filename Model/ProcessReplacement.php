@@ -145,7 +145,7 @@ class ProcessReplacement
         array $affectedItem,
         array $parentIds,
         CartInterface &$quote
-    ): CartItemInterface|string {
+    ) {
         $childProduct = $product;
         $product = $this->productRepository->getById((int)$parentIds[0]);
 

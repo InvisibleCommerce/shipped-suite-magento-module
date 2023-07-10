@@ -7,27 +7,31 @@ use InvisibleCommerce\ShippedSuite\Helper\CartHelper;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Model\QuoteMutexInterface;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ResourceConnection;
 
 class ShippedSuite implements ResolverInterface
 {
     private GetCartForUser $getCartForUser;
-    private QuoteMutexInterface $quoteMutex;
     private CartHelper $cartHelper;
     private QuoteRepository $quoteRepository;
+    private LoggerInterface $logger;
+    private ResourceConnection $resourceConnection;
 
     public function __construct(
         GetCartForUser $getCartForUser,
-        QuoteMutexInterface $quoteMutex,
         CartHelper $cartHelper,
-        QuoteRepository $quoteRepository
+        QuoteRepository $quoteRepository,
+        LoggerInterface $logger,
+        ResourceConnection $resourceConnection
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->quoteMutex = $quoteMutex;
         $this->cartHelper = $cartHelper;
         $this->quoteRepository = $quoteRepository;
+        $this->logger = $logger;
+        $this->resourceConnection = $resourceConnection;
     }
 
     public function resolve(
@@ -37,11 +41,7 @@ class ShippedSuite implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        return $this->quoteMutex->execute(
-            [$args['input']['cart_id']],
-            \Closure::fromCallable([$this, 'run']),
-            [$context, $args]
-        );
+        return $this->run($context, $args);
     }
 
     private function run($context, ?array $args): array
@@ -53,7 +53,16 @@ class ShippedSuite implements ResolverInterface
         if ($args['input']['selected']) {
             $cart = $this->cartHelper->addManagedProducts($cart);
         }
-        $this->quoteRepository->save($cart);
+
+        $connection = $this->resourceConnection->getConnection();
+        $connection->beginTransaction();
+        try {
+            $this->quoteRepository->save($cart);
+            $connection->commit();
+        } catch (\Exception $exception) {
+            $connection->rollBack();
+            $this->logger->error('transaction failed to commit ' . $exception->getMessage());
+        }
 
         return [
             'cart' => [
