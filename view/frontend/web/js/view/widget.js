@@ -25,12 +25,13 @@ define(
             initialize: function() {
                 var checkoutConfig = window.checkoutConfig;
                 var config = checkoutConfig.shippedSuite;
+                var localShippedConfig;
 
                 if (typeof shippedConfig !== 'undefined') {
                     // variable is undefined
-                    var localShippedConfig = Object.assign(config.shippedConfig, shippedConfig || {});
+                    localShippedConfig = Object.assign(config.shippedConfig, shippedConfig || {});
                 } else {
-                    var localShippedConfig = config.shippedConfig;
+                    localShippedConfig = config.shippedConfig;
                 }
 
                 this._super();
@@ -63,9 +64,15 @@ define(
                             const shippedWidget = new Shipped.Widget(localShippedConfig);
 
                             let subtotal = 0;
-                            customerData.get('cart')().items.map((item) => {
-                                subtotal += item.product_price_value * item.qty;
+                            checkoutConfig.totalsData.items.map((item) => {
+                                subtotal += item.base_price * item.qty;
                             });
+                            // old approach sometimes would get undefined items...
+                            // alert('test!');
+                            // console.log(customerData);
+                            // customerData.get('cart')().items.map((item) => {
+                            //     subtotal += item.product_price_value * item.qty;
+                            // });
 
                             shippedWidget.updateOrderValue(subtotal);
                             shippedWidget.onChange((details) => {
