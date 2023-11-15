@@ -69,7 +69,7 @@ define(
                                 'Shipped Shield Package Assurance'
                             ];
                             checkoutConfig.totalsData.items.map((item) => {
-                                if (excludedProductNames.some((name) => item.name == name)) return 0;
+                                if (excludedProductNames.some((name) => item.name === name)) return 0;
 
                                 subtotal += item.base_price * item.qty;
                             });
