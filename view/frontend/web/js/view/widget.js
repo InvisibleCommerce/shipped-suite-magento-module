@@ -64,7 +64,13 @@ define(
                             const shippedWidget = new Shipped.Widget(localShippedConfig);
 
                             let subtotal = 0;
+                            let excludedProductNames = [
+                                'Shipped Green Carbon Neutral Shipment',
+                                'Shipped Shield Package Assurance'
+                            ];
                             checkoutConfig.totalsData.items.map((item) => {
+                                if (excludedProductNames.some((name) => item.name == name)) return 0;
+
                                 subtotal += item.base_price * item.qty;
                             });
                             // old approach sometimes would get undefined items...
